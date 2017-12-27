@@ -29,8 +29,15 @@
         import java.sql.Statement;
         import java.util.ResourceBundle;
 
-public class TodoTimerController implements Initializable {
+public class Controller implements Initializable {
 
+    //[Declarations]
+
+    //search window -----------------------------------------------------
+    @FXML
+    private TextField search;
+
+    // task input field -------------------------------------------------
     @FXML
     private TextField todo;
 
@@ -43,19 +50,65 @@ public class TodoTimerController implements Initializable {
     @FXML
     private Button ok;
 
+
+    // todolist with timer ----------------------------------------------
     @FXML
     private JFXTreeTableView<TodoInfo> todoListTable;
 
-    @FXML
-    private JFXButton timerSwitch;
-
-    @FXML
-    private JFXTextField display;
-
+    // information to access sql ------------------------------------------
     String msUrl = "jdbc:mysql://localhost:3306/studymode_db";
     String user = "root";
     String password = "";
 
+
+
+    // [Methods]
+
+
+    //search window -----------------------------------------------------
+    @FXML
+    void searchWeb(ActionEvent event) {
+        String word = search.getText();
+        runSearchCommand(word);
+    }
+
+
+    public void runSearchCommand(String word) {
+        try {
+            String url = "http://www.google.com/search?q=" + word;
+            String command = "open " + url;
+            Runtime.getRuntime().exec(command);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // task input field -------------------------------------------------
+    @FXML
+    void addNewTodo(ActionEvent event) {
+        String subjectStr = subject.getText();
+        String categoryStr = category.getText();
+        String todoStr = todo.getText();
+
+        if (!(subjectStr == "" && categoryStr == "" && todoStr == "")){
+            try {
+                Connection myConn = DriverManager.getConnection(msUrl, user, password);
+                Statement myStmt = myConn.createStatement();
+                String sql = "insert into todo_table (subject, category, task)"
+                        + " values ('" + subjectStr + "', '" + categoryStr + "', '" + todoStr + "')";
+                myStmt.executeUpdate(sql);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        subject.setText("");
+        category.setText("");
+        todo.setText("");
+    }
+
+
+
+    // todolist with timer ----------------------------------------------
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -95,7 +148,7 @@ public class TodoTimerController implements Initializable {
 
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<TodoInfo, String> param) {
-                return param.getValue().getValue().todoSP;
+                return param.getValue().getValue().timerSP;
             }
         });
 
@@ -127,95 +180,5 @@ public class TodoTimerController implements Initializable {
         todoListTable.setRoot(root);
         todoListTable.setShowRoot(false);
 
-    }
-
-
-
-    @FXML
-    void addNewTodo(ActionEvent event) {
-        String subjectStr = subject.getText();
-        String categoryStr = category.getText();
-        String todoStr = todo.getText();
-
-        if (!(subjectStr == "" && categoryStr == "" && todoStr == "")){
-            try {
-                Connection myConn = DriverManager.getConnection(msUrl, user, password);
-                Statement myStmt = myConn.createStatement();
-                String sql = "insert into todo_table (subject, category, task)"
-                        + " values ('" + subjectStr + "', '" + categoryStr + "', '" + todoStr + "')";
-                myStmt.executeUpdate(sql);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        subject.setText("");
-        category.setText("");
-        todo.setText("");
-    }
-
-
-    @FXML
-    void toggleStartStop(ActionEvent event) {
-        if(timerSwitch.getText().equals("Start")) {
-            getTimer().start();
-            timerSwitch.setText("Stop");
-        } else {
-            getTimer().stop();
-            timerSwitch.setText("Start");
-        }
-    }
-
-    class TodoInfo extends RecursiveTreeObject<TodoInfo> {
-        StringProperty subjectSP;
-        StringProperty categorySP;
-        StringProperty todoSP;
-        AnimationTimer timerAT;
-        JFXButton switchButton;
-
-        public TodoInfo(String subject, String category, String todo) {
-            this.subjectSP = new SimpleStringProperty(subject);
-            this.categorySP = new SimpleStringProperty(category);
-            this.todoSP = new SimpleStringProperty(todo);
-            this.switchButton = new JFXButton("Start");
-        }
-
-
-
-    }
-
-    AnimationTimer getTimer() {
-
-        AnimationTimer timer = new AnimationTimer() {
-            private long timestamp;
-            private long time = 0;
-            private long fraction = 0;
-
-            @Override
-            public void start() {
-                // current time adjusted by remaining time from last run
-                timestamp = System.currentTimeMillis() - fraction;
-                super.start();
-            }
-
-            @Override
-            public void stop() {
-                super.stop();
-                // save leftover time not handled with the last update
-                fraction = System.currentTimeMillis() - timestamp;
-            }
-
-            @Override
-            public void handle(long now) {
-                long newTime = System.currentTimeMillis();
-                if (timestamp + 1000 <= newTime) {
-                    long deltaT = (newTime - timestamp) / 1000;
-                    time += deltaT;
-                    timestamp += 1000 * deltaT;
-                    display.setText(Long.toString(time));
-                }
-            }
-        };
-
-        return timer;
     }
 }
