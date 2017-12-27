@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TodoTimerController">
+   <children>
+      <Button fx:id="ok" layoutX="502.0" layoutY="124.0" mnemonicParsing="false" onAction="#addNewTodo" text="OK!" />
+      <TextField layoutX="53.0" layoutY="19.0" prefHeight="87.0" prefWidth="455.0" text="circle chart" />
+      <JFXTextField fx:id="subject" layoutX="25.0" layoutY="124.0" prefHeight="27.0" prefWidth="102.0" promptText="Subject" />
+      <JFXTextField fx:id="category" layoutX="143.0" layoutY="124.0" prefHeight="27.0" prefWidth="102.0" promptText="Category" />
+      <JFXTextField fx:id="todo" layoutX="259.0" layoutY="124.0" onAction="#addNewTodo" prefHeight="27.0" prefWidth="232.0" promptText="To Do" />
+      <JFXButton fx:id="timerSwitch" layoutX="738.0" layoutY="151.0" onAction="#toggleStartStop" text="Start" />
+      <JFXTreeTableView fx:id="todoListTable" layoutX="1.0" layoutY="191.0" prefHeight="321.0" prefWidth="799.0" />
+      <JFXTextField fx:id="display" layoutX="580.0" layoutY="151.0" />
+   </children>
+</AnchorPane>
