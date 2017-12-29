@@ -92,7 +92,7 @@ public class Controller implements Initializable {
             try {
                 Connection myConn = DriverManager.getConnection(msUrl, user, password);
                 Statement myStmt = myConn.createStatement();
-                String sql = "insert into todo_table (subject, category, task)"
+                String sql = "insert into todo_table (subject, category, todo)"
                         + " values ('" + subjectStr + "', '" + categoryStr + "', '" + todoStr + "')";
                 myStmt.executeUpdate(sql);
                 URL viewUrl = getClass().getResource("View.fxml");
@@ -164,10 +164,11 @@ public class Controller implements Initializable {
             Statement myStmt = myConn.createStatement();
             ResultSet myRs = myStmt.executeQuery("select * from todo_table");
             while(myRs.next()) {
+                int i = myRs.getInt("todo_id");
                 String s = myRs.getString("subject");
                 String c = myRs.getString("category");
-                String t = myRs.getString("task");
-                todoInfoList.add(new TodoInfo(s, c, t));
+                String t = myRs.getString("todo");
+                todoInfoList.add(new TodoInfo(i, s, c, t));
             }
         } catch (Exception e) {
             e.printStackTrace();
