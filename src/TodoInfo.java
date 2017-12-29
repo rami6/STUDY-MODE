@@ -27,6 +27,10 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
     StringProperty display;
     JFXButton switchButton;
 
+    java.sql.Timestamp startTime;
+    java.sql.Timestamp stopTime;
+    long spentTime;
+
     // information to access sql ------------------------------------------
     String msUrl = "jdbc:mysql://localhost:3306/studymode_db";
     String user = "root";
@@ -45,6 +49,7 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
         this.timer = getTimer();
         this.switchButton = new JFXButton("Start");
         switchButton.setOnAction(e -> toggleStartStop(switchButton));
+
     }
 
     public AnimationTimer getTimer() {
@@ -84,34 +89,28 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
     }
 
     void toggleStartStop(JFXButton switchButton) {
-        Date date = new Date();
-        java.sql.Timestamp currentTime = new java.sql.Timestamp(date.getTime());
-        java.sql.Timestamp startTime = currentTime;
-        java.sql.Timestamp stopTime;
 
         if(switchButton.getText().equals("Start")) {
             timer.start();
-            currentTime = new java.sql.Timestamp(date.getTime());
-            startTime = currentTime;
+            Date date = new Date();
+            startTime = new java.sql.Timestamp(date.getTime());
             switchButton.setText("Stop");
         } else {
             timer.stop();
-            currentTime = new java.sql.Timestamp(date.getTime());
-            stopTime = currentTime;
+            Date date = new Date();
+            stopTime = new java.sql.Timestamp(date.getTime());
             switchButton.setText("Start");
+            spentTime = stopTime.getTime() - startTime.getTime();
+
             try {
                 Connection myConn = DriverManager.getConnection(msUrl, user, password);
                 Statement myStmt = myConn.createStatement();
-                String sql = "insert into time_tracking_table (start_time, stop_time, todo_id, subject, category, todo)"
-                        + " values ('" + startTime + "', '" + stopTime + "', '" + todoId + "', '" + subject + "', '" + category + "', '" + todo + "')";
+                String sql = "insert into time_tracking_table (start_time, stop_time, spent_time, todo_id, subject, category, todo)"
+                        + " values ('" + startTime + "', '" + stopTime + "', '" + spentTime + "', '" + todoId + "', '" + subject + "', '" + category + "', '" + todo + "')";
                 myStmt.executeUpdate(sql);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    void recordTime() {
-
     }
 }
