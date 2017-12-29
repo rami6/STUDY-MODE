@@ -54,6 +54,7 @@ public class Controller implements Initializable {
     // todolist with timer ----------------------------------------------
     @FXML
     private JFXTreeTableView<TodoInfo> todoListTable;
+    final ObservableList<TodoInfo> todoInfoList = FXCollections.observableArrayList();
 
     // information to access sql ------------------------------------------
     String msUrl = "jdbc:mysql://localhost:3306/studymode_db";
@@ -97,6 +98,8 @@ public class Controller implements Initializable {
                 String sql = "insert into todo_table (subject, category, task)"
                         + " values ('" + subjectStr + "', '" + categoryStr + "', '" + todoStr + "')";
                 myStmt.executeUpdate(sql);
+                URL viewUrl = getClass().getResource("View.fxml");
+                initialize(viewUrl, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -105,8 +108,6 @@ public class Controller implements Initializable {
         category.setText("");
         todo.setText("");
     }
-
-
 
     // todolist with timer ----------------------------------------------
     @Override
@@ -158,8 +159,6 @@ public class Controller implements Initializable {
 //                new PropertyValueFactory<TodoInfo, String>("switchButton")
 //        );
 
-        ObservableList<TodoInfo> todoInfoList = FXCollections.observableArrayList();
-
         try {
             Connection myConn = DriverManager.getConnection(msUrl, user, password);
             Statement myStmt = myConn.createStatement();
@@ -179,6 +178,5 @@ public class Controller implements Initializable {
         todoListTable.getColumns().setAll(subjectCl, categoryCl, todoCl, timerCl, switchCl);
         todoListTable.setRoot(root);
         todoListTable.setShowRoot(false);
-
     }
 }
