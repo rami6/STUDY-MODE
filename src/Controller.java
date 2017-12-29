@@ -4,14 +4,12 @@
         import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
         import com.jfoenix.controls.RecursiveTreeItem;
 
-        import javafx.animation.AnimationTimer;
+        import javafx.beans.property.ReadOnlyObjectWrapper;
         import javafx.scene.control.TreeItem;
         import javafx.scene.control.TreeTableColumn;
         import com.jfoenix.controls.JFXTreeTableColumn;
         import com.jfoenix.controls.JFXTreeTableView;
 
-        import javafx.beans.property.SimpleStringProperty;
-        import javafx.beans.property.StringProperty;
         import javafx.beans.value.ObservableValue;
         import javafx.collections.FXCollections;
         import javafx.collections.ObservableList;
@@ -19,7 +17,6 @@
         import javafx.fxml.FXML;
         import javafx.fxml.Initializable;
         import javafx.scene.control.*;
-        import javafx.scene.control.cell.PropertyValueFactory;
         import javafx.util.Callback;
 
         import java.net.URL;
@@ -149,15 +146,18 @@ public class Controller implements Initializable {
 
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<TodoInfo, String> param) {
-                return param.getValue().getValue().timerSP;
+                return param.getValue().getValue().display;
             }
         });
 
-        JFXTreeTableColumn<TodoInfo, String> switchCl = new JFXTreeTableColumn<>("Switch");
+        JFXTreeTableColumn<TodoInfo, JFXButton> switchCl = new JFXTreeTableColumn<>("Switch");
         switchCl.setPrefWidth(100);
-//        switchCl.setCellValueFactory(
-//                new PropertyValueFactory<TodoInfo, String>("switchButton")
-//        );
+        switchCl.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton>, ObservableValue<JFXButton>>() {
+            @Override
+            public ObservableValue<JFXButton> call(TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton> param) {
+                return new ReadOnlyObjectWrapper(param.getValue().getValue().switchButton);
+            }
+        });
 
         try {
             Connection myConn = DriverManager.getConnection(msUrl, user, password);
@@ -172,7 +172,6 @@ public class Controller implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         // build tree
         final TreeItem<TodoInfo> root = new RecursiveTreeItem<TodoInfo>(todoInfoList, RecursiveTreeObject::getChildren);
         todoListTable.getColumns().setAll(subjectCl, categoryCl, todoCl, timerCl, switchCl);
