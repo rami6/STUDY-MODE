@@ -108,6 +108,12 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
                 String sql = "insert into time_tracking_table (start_time, stop_time, spent_time, todo_id, subject, category, todo)"
                         + " values ('" + startTime + "', '" + stopTime + "', '" + spentTime + "', '" + todoId + "', '" + subject + "', '" + category + "', '" + todo + "')";
                 myStmt.executeUpdate(sql);
+
+                myStmt = myConn.createStatement();
+                sql = "update todo_table " +
+                        "set total_spent_time = total_spent_time + " + spentTime +
+                        " where todo_id = " + todoId;
+                myStmt.executeUpdate(sql);
             } catch (Exception e) {
                 e.printStackTrace();
             }
