@@ -53,6 +53,8 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
             hStr = String.format("%03d", hours);
         } else if (hours < 10000) {
             hStr = String.format("%04d", hours);
+        } else {
+            hStr = "OVER";
         }
 
         this.display = new SimpleStringProperty(hStr + ":" + new SimpleDateFormat("mm:ss").format(new Date(totalSpentTime)));
@@ -97,7 +99,9 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
                         hStr = String.format("%03d", hours);
                     } else if (hours < 10000) {
                         hStr = String.format("%04d", hours);
-                    } 
+                    } else {
+                        hStr = "OVER";
+                    }
                     display.set(hStr + ":" + new SimpleDateFormat("mm:ss").format(new Date(time * 1000)));
                 }
             }

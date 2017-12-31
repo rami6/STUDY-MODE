@@ -3,6 +3,7 @@
         import com.jfoenix.controls.*;
         import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
         import com.jfoenix.controls.RecursiveTreeItem;
+        import com.jfoenix.controls.JFXComboBox;
 
         import javafx.beans.property.ReadOnlyObjectWrapper;
         import javafx.scene.control.TreeItem;
@@ -34,19 +35,21 @@ public class Controller implements Initializable {
     @FXML
     private TextField search;
 
-    // task input field -------------------------------------------------
+    // todothing input field -------------------------------------------------
     @FXML
     private TextField todo;
 
     @FXML
-    private TextField subject;
+
+    private ObservableList<String> subList = FXCollections.observableArrayList("aaa");
+    @FXML
+    private JFXComboBox<String> subject;
 
     @FXML
-    private TextField category;
+    private JFXComboBox<String> category;
 
     @FXML
     private Button ok;
-
 
     // todolist with timer ----------------------------------------------
     @FXML
@@ -61,6 +64,13 @@ public class Controller implements Initializable {
 
 
     // [Methods]
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+        setSubjectOption();
+        createTable();
+    }
 
 
     //search window -----------------------------------------------------
@@ -81,11 +91,43 @@ public class Controller implements Initializable {
         }
     }
 
-    // task input field -------------------------------------------------
+    // todothing input field -------------------------------------------------
+
+
+    void setSubjectOption() {
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select * from subject_table");
+            while(myRs.next()) {
+                subject.getItems().add(myRs.getString("subject_name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        subject.getItems().add("create new");
+    }
+
+    @FXML
+    void setCategoryOption(ActionEvent event) {
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select * from category_table where subject_name = '" + subject.getValue() + "'");
+            while(myRs.next()) {
+                category.getItems().add(myRs.getString("category_name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        category.getItems().add("create new");
+    }
+
     @FXML
     void addNewTodo(ActionEvent event) {
-        String subjectStr = subject.getText();
-        String categoryStr = category.getText();
+
+        String subjectStr = subject.getValue();
+        String categoryStr = category.getValue();
         String todoStr = todo.getText();
 
         if (!(subjectStr == "" && categoryStr == "" && todoStr == "")){
@@ -101,15 +143,13 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         }
-        subject.setText("");
-        category.setText("");
+        subject.setValue("");
+        category.setValue("");
         todo.setText("");
     }
 
     // todolist with timer ----------------------------------------------
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
+    void createTable() {
         JFXTreeTableColumn<TodoInfo, String> subjectCl = new JFXTreeTableColumn<>("Subject");
         subjectCl.setPrefWidth(100);
         subjectCl.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, String>, ObservableValue<String>>() {
