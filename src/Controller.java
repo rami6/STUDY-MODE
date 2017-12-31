@@ -168,7 +168,8 @@ public class Controller implements Initializable {
                 String s = myRs.getString("subject");
                 String c = myRs.getString("category");
                 String t = myRs.getString("todo");
-                todoInfoList.add(new TodoInfo(i, s, c, t));
+                Long tsTime = myRs.getLong("total_spent_time");
+                todoInfoList.add(new TodoInfo(i, s, c, t, tsTime));
             }
         } catch (Exception e) {
             e.printStackTrace();

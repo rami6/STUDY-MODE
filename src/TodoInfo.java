@@ -6,13 +6,10 @@ import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 class TodoInfo extends RecursiveTreeObject<TodoInfo> {
@@ -37,7 +34,7 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
     String password = "";
     //---------------------------------------------------------------------
 
-    public TodoInfo(int todoId, String subject, String category, String todo) {
+    public TodoInfo(int todoId, String subject, String category, String todo, Long totalSpentTime) {
         this.todoId = todoId;
         this.subject = subject;
         this.category = category;
@@ -45,18 +42,30 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
         this.subjectSP = new SimpleStringProperty(subject);
         this.categorySP = new SimpleStringProperty(category);
         this.todoSP = new SimpleStringProperty(todo);
-        this.display = new SimpleStringProperty();
-        this.timer = getTimer();
+
+        // calculate initial timer value
+        long totalSpentSec = totalSpentTime / 1000;
+        long hours = totalSpentSec / (60 * 60);
+        String hStr = Long.toString(hours);
+        if(hours < 100) {
+            hStr = String.format("%02d", hours);
+        } else if (hours < 1000) {
+            hStr = String.format("%03d", hours);
+        } else if (hours < 10000) {
+            hStr = String.format("%04d", hours);
+        }
+
+        this.display = new SimpleStringProperty(hStr + ":" + new SimpleDateFormat("mm:ss").format(new Date(totalSpentTime)));
+        this.timer = getTimer(totalSpentSec);
         this.switchButton = new JFXButton("Start");
         switchButton.setOnAction(e -> toggleStartStop(switchButton));
-
     }
 
-    public AnimationTimer getTimer() {
+    public AnimationTimer getTimer(Long totalSpentSec) {
 
         AnimationTimer timer = new AnimationTimer() {
             private long timestamp;
-            private long time = 0;
+            private long time = totalSpentSec;
             private long fraction = 0;
 
             @Override
@@ -80,7 +89,16 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
                     long deltaT = (newTime - timestamp) / 1000;
                     time += deltaT;
                     timestamp += 1000 * deltaT;
-                    display.set(Long.toString(time));
+                    long hours = time / (60 * 60);
+                    String hStr = Long.toString(hours);
+                    if(hours < 100) {
+                        hStr = String.format("%02d", hours);
+                    } else if (hours < 1000) {
+                        hStr = String.format("%03d", hours);
+                    } else if (hours < 10000) {
+                        hStr = String.format("%04d", hours);
+                    } 
+                    display.set(hStr + ":" + new SimpleDateFormat("mm:ss").format(new Date(time * 1000)));
                 }
             }
         };
