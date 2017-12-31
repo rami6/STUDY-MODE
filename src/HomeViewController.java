@@ -6,6 +6,9 @@
         import com.jfoenix.controls.JFXComboBox;
 
         import javafx.beans.property.ReadOnlyObjectWrapper;
+        import javafx.fxml.FXMLLoader;
+        import javafx.scene.Parent;
+        import javafx.scene.Scene;
         import javafx.scene.control.TreeItem;
         import javafx.scene.control.TreeTableColumn;
         import com.jfoenix.controls.JFXTreeTableColumn;
@@ -18,8 +21,10 @@
         import javafx.fxml.FXML;
         import javafx.fxml.Initializable;
         import javafx.scene.control.*;
+        import javafx.stage.Stage;
         import javafx.util.Callback;
 
+        import java.io.IOException;
         import java.net.URL;
         import java.sql.Connection;
         import java.sql.DriverManager;
@@ -27,7 +32,7 @@
         import java.sql.Statement;
         import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class HomeViewController implements Initializable {
 
     //[Declarations]
 
@@ -123,9 +128,24 @@ public class Controller implements Initializable {
             }
             category.getItems().add("create new");
         } else {
-            
+            openCreateWindow();
         }
     }
+
+    @FXML
+    void openCreateWindow() {
+
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("CreateSubjectView.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Create new Subject");
+            stage.setScene(new Scene(root, 400, 200));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     void addNewTodo(ActionEvent event) {
@@ -141,7 +161,7 @@ public class Controller implements Initializable {
                 String sql = "insert into todo_table (subject, category, todo)"
                         + " values ('" + subjectStr + "', '" + categoryStr + "', '" + todoStr + "')";
                 myStmt.executeUpdate(sql);
-                URL viewUrl = getClass().getResource("View.fxml");
+                URL viewUrl = getClass().getResource("HomeView.fxml");
                 initialize(viewUrl, null);
             } catch (Exception e) {
                 e.printStackTrace();
