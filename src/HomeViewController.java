@@ -69,7 +69,7 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         setSubjectOption();
-        createTable();
+        setTableView();
     }
 
 
@@ -110,17 +110,21 @@ public class Controller implements Initializable {
 
     @FXML
     void setCategoryOption(ActionEvent event) {
-        try {
-            Connection myConn = DriverManager.getConnection(msUrl, user, password);
-            Statement myStmt = myConn.createStatement();
-            ResultSet myRs = myStmt.executeQuery("select * from category_table where subject_name = '" + subject.getValue() + "'");
-            while(myRs.next()) {
-                category.getItems().add(myRs.getString("category_name"));
+        if(subject.getValue() != "create new") {
+            try {
+                Connection myConn = DriverManager.getConnection(msUrl, user, password);
+                Statement myStmt = myConn.createStatement();
+                ResultSet myRs = myStmt.executeQuery("select * from category_table where subject_name = '" + subject.getValue() + "'");
+                while (myRs.next()) {
+                    category.getItems().add(myRs.getString("category_name"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            category.getItems().add("create new");
+        } else {
+            
         }
-        category.getItems().add("create new");
     }
 
     @FXML
@@ -149,7 +153,7 @@ public class Controller implements Initializable {
     }
 
     // todolist with timer ----------------------------------------------
-    void createTable() {
+    void setTableView() {
         JFXTreeTableColumn<TodoInfo, String> subjectCl = new JFXTreeTableColumn<>("Subject");
         subjectCl.setPrefWidth(100);
         subjectCl.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, String>, ObservableValue<String>>() {
