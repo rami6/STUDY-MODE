@@ -46,8 +46,8 @@ public class HomeViewController implements Initializable {
     private TextField todo;
 
     @FXML
-
     private ObservableList<String> subList = FXCollections.observableArrayList("aaa");
+
     @FXML
     private JFXComboBox<String> subject;
 
@@ -56,6 +56,9 @@ public class HomeViewController implements Initializable {
 
     @FXML
     private Button ok;
+
+    private Stage newSubjectStage;
+
 
     // todolist with timer ----------------------------------------------
     @FXML
@@ -128,6 +131,7 @@ public class HomeViewController implements Initializable {
 
     @FXML
     void setCategoryOption(ActionEvent event) {
+        category.getItems().clear();
         if(subject.getValue() != "create new") {
             try {
                 Connection myConn = DriverManager.getConnection(msUrl, user, password);
@@ -141,24 +145,9 @@ public class HomeViewController implements Initializable {
             }
             category.getItems().add("create new");
         } else {
-            openCreateWindow();
+            openNewSbjWindow();
         }
     }
-
-    @FXML
-    void openCreateWindow() {
-
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("CreateSubjectView.fxml"));
-            Stage stage = new Stage();
-            stage.setTitle("Create new Subject");
-            stage.setScene(new Scene(root, 400, 200));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @FXML
     void addNewTodo(ActionEvent event) {
@@ -174,8 +163,8 @@ public class HomeViewController implements Initializable {
                 String sql = "insert into todo_table (subject, category, todo)"
                         + " values ('" + subjectStr + "', '" + categoryStr + "', '" + todoStr + "')";
                 myStmt.executeUpdate(sql);
-                URL viewUrl = getClass().getResource("HomeView.fxml");
-                initialize(viewUrl, null);
+                //URL viewUrl = getClass().getResource("HomeView.fxml");
+                setTableView();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -183,6 +172,21 @@ public class HomeViewController implements Initializable {
         subject.setValue("");
         category.setValue("");
         todo.setText("");
+    }
+
+    // create new Subject
+    @FXML
+    void openNewSbjWindow() {
+
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("CreateSubjectView.fxml"));
+            newSubjectStage = new Stage();
+            newSubjectStage.setTitle("Create new Subject");
+            newSubjectStage.setScene(new Scene(root, 400, 200));
+            newSubjectStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // todolist with timer ----------------------------------------------
