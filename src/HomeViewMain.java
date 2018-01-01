@@ -12,7 +12,7 @@ public class HomeViewMain extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("HomeView.fxml"));
         primaryStage.setTitle("STUDY MODE");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.show();
     }
 
