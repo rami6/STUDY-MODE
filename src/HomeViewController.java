@@ -4,6 +4,7 @@
         import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
         import com.jfoenix.controls.RecursiveTreeItem;
         import com.jfoenix.controls.JFXComboBox;
+        import com.jfoenix.controls.JFXDatePicker;
 
         import javafx.beans.property.ReadOnlyObjectWrapper;
         import javafx.fxml.FXMLLoader;
@@ -60,6 +61,18 @@ public class HomeViewController implements Initializable {
     @FXML
     private JFXTreeTableView<TodoInfo> todoListTable;
     final ObservableList<TodoInfo> todoInfoList = FXCollections.observableArrayList();
+
+
+    // dammy ----------------------------------------------
+
+    @FXML
+    private JFXTextField dailyTotalTime;
+
+    @FXML
+    private JFXTextField selectedDate;
+
+    @FXML
+    private JFXDatePicker datePicker;
 
     // information to access sql ------------------------------------------
     String msUrl = "jdbc:mysql://localhost:3306/studymode_db";
