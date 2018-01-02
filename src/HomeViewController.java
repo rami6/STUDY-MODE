@@ -70,6 +70,13 @@ public class HomeViewController implements Initializable {
     private JFXTreeTableView<TodoInfo> todoListTable;
     final ObservableList<TodoInfo> todoInfoList = FXCollections.observableArrayList();
 
+    // record screen video ----------------------------------------------
+    @FXML
+    private JFXButton recordBtn;
+
+    @FXML
+    private JFXButton watchBtn;
+
 
     // dammy ----------------------------------------------
 
@@ -329,4 +336,38 @@ public class HomeViewController implements Initializable {
         todoListTable.setRoot(root);
         todoListTable.setShowRoot(false);
     }
+
+    // record screen video ----------------------------------------------
+
+    @FXML
+    void startStopRecord(ActionEvent event) {
+        if(recordBtn.getText().equals("Record")) {
+            recordBtn.setText("Stop");
+            // let QuickTime start recording
+
+        } else {
+            recordBtn.setText("Record");
+            // let QuickTime stop recording
+
+        }
+    }
+    @FXML
+    void openVideoFolder(ActionEvent event) {
+        // get path to default folder that QuickTime store screen video
+
+        // open the folder using command
+
+    }
+
+    // for reference. This method will be deleted at last ----------
+    void runCommand() {
+        try {
+            String command = "some command";
+            Runtime.getRuntime().exec(command);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    // -------------------------------------------------------------
+
 }
