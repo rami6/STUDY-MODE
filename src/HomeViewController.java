@@ -22,6 +22,7 @@
         import javafx.fxml.FXML;
         import javafx.fxml.Initializable;
         import javafx.scene.control.*;
+        import javafx.scene.layout.Pane;
         import javafx.stage.Stage;
         import javafx.util.Callback;
 
@@ -31,6 +32,7 @@
         import java.sql.DriverManager;
         import java.sql.ResultSet;
         import java.sql.Statement;
+        import java.util.Optional;
         import java.util.ResourceBundle;
 
 public class HomeViewController implements Initializable {
@@ -57,8 +59,11 @@ public class HomeViewController implements Initializable {
     @FXML
     private Button ok;
 
-    private Stage newSubjectStage;
+    @FXML
+    private JFXTextField newSubject;
 
+    @FXML
+    private JFXButton addSbjBtn;
 
     // todolist with timer ----------------------------------------------
     @FXML
@@ -92,7 +97,6 @@ public class HomeViewController implements Initializable {
         setSubjectOption();
         setTableView();
     }
-
 
     //search window -----------------------------------------------------
     @FXML
@@ -175,16 +179,35 @@ public class HomeViewController implements Initializable {
     }
 
     // create new Subject
+
+    public void setNewSubject(String str) {
+        setSubjectOption();
+        subject.setValue(str);
+    }
+
     @FXML
     void openNewSbjWindow() {
 
+        TextInputDialog dialog = new TextInputDialog("");
+        dialog.setContentText("Enter new subject:");
+        dialog.setTitle("Create new Subject");
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(newSubject -> addNewSubject(newSubject));
+        result.ifPresent(newSubject -> setNewSubject(newSubject));
+
+    }
+
+    void addNewSubject(String newSubject) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("CreateSubjectView.fxml"));
-            newSubjectStage = new Stage();
-            newSubjectStage.setTitle("Create new Subject");
-            newSubjectStage.setScene(new Scene(root, 400, 200));
-            newSubjectStage.show();
-        } catch (IOException e) {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            String sql = "insert into subject_table (subject_name)"
+                    + " values ('" + newSubject + "')";
+            myStmt.executeUpdate(sql);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
