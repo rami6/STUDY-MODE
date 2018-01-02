@@ -26,8 +26,8 @@
       
             <!--todolist with timer-->
             <JFXTreeTableView fx:id="todoListTable" layoutX="495.0" layoutY="153.0" prefHeight="321.0" prefWidth="656.0" />
-            <JFXComboBox fx:id="subject" layoutX="495.0" layoutY="113.0" onAction="#setCategoryOption" prefHeight="27.0" prefWidth="136.0" promptText="Subject" />
-            <JFXComboBox fx:id="category" layoutX="647.0" layoutY="113.0" prefHeight="27.0" prefWidth="132.0" promptText="Category" />
+            <JFXComboBox fx:id="subject" layoutX="495.0" layoutY="113.0" onAction="#subjectAction" prefHeight="27.0" prefWidth="136.0" promptText="Subject" />
+            <JFXComboBox fx:id="category" layoutX="647.0" layoutY="113.0" onAction="#categoryAction" prefHeight="27.0" prefWidth="132.0" promptText="Category" />
 
             <!--dammy-->
             <JFXTextField fx:id="dailyTotalTime" alignment="CENTER" layoutX="254.0" layoutY="193.0" prefHeight="68.0" prefWidth="208.0">

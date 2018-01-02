@@ -134,7 +134,11 @@ public class HomeViewController implements Initializable {
     }
 
     @FXML
-    void setCategoryOption(ActionEvent event) {
+    void subjectAction(ActionEvent event) {
+        setCategoryOption();
+    }
+
+    void setCategoryOption() {
         category.getItems().clear();
         if(subject.getValue() != "create new") {
             try {
@@ -149,7 +153,15 @@ public class HomeViewController implements Initializable {
             }
             category.getItems().add("create new");
         } else {
-            openNewSbjWindow();
+            openNewSbjDialog();
+        }
+    }
+
+    @FXML
+    void categoryAction(ActionEvent event) {
+
+        if(category.getValue() == "create new") {
+            openNewCtgDialog();
         }
     }
 
@@ -180,13 +192,7 @@ public class HomeViewController implements Initializable {
 
     // create new Subject
 
-    public void setNewSubject(String str) {
-        setSubjectOption();
-        subject.setValue(str);
-    }
-
-    @FXML
-    void openNewSbjWindow() {
+    void openNewSbjDialog() {
 
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setContentText("Enter new subject:");
@@ -197,7 +203,6 @@ public class HomeViewController implements Initializable {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(newSubject -> addNewSubject(newSubject));
         result.ifPresent(newSubject -> setNewSubject(newSubject));
-
     }
 
     void addNewSubject(String newSubject) {
@@ -207,9 +212,49 @@ public class HomeViewController implements Initializable {
             String sql = "insert into subject_table (subject_name)"
                     + " values ('" + newSubject + "')";
             myStmt.executeUpdate(sql);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    void setNewSubject(String str) {
+        setSubjectOption();
+        subject.setValue(str);
+    }
+
+    // create new category
+
+    void openNewCtgDialog() {
+
+        TextInputDialog dialog = new TextInputDialog("");
+        dialog.setContentText("Enter new category:");
+        dialog.setTitle("Create new category");
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(newCategory -> addNewCategory(newCategory));
+        result.ifPresent(newCategory -> setNewCategory(newCategory));
+    }
+
+    void addNewCategory(String newCategory) {
+        try {
+            String subjectStr = subject.getValue();
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            String sql = "insert into category_table (subject_name, category_name)"
+                    + " values ('" + subjectStr + "', " + "'" + newCategory + "')";
+            myStmt.executeUpdate(sql);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void setNewCategory(String str) {
+        setCategoryOption();
+        category.setValue(str);
     }
 
     // todolist with timer ----------------------------------------------
