@@ -8,6 +8,7 @@ import javafx.beans.property.StringProperty;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -135,6 +136,20 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
                 sql = "update todo_table " +
                         "set total_spent_time = total_spent_time + " + spentTime +
                         " where todo_id = " + todoId;
+                myStmt.executeUpdate(sql);
+
+                // add spent time to daily_studytime_table
+                myStmt = myConn.createStatement();
+                String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+
+                sql = "insert ignore into daily_studytime_table (study_date, study_time)" +
+                        "values ('" + todayDate + "', '0')";
+                myStmt.executeUpdate(sql);
+
+                myStmt = myConn.createStatement();
+                sql = "update daily_studytime_table " +
+                        "set study_time = study_time + " + spentTime +
+                        " where study_date = '" + todayDate + "'";
                 myStmt.executeUpdate(sql);
             } catch (Exception e) {
                 e.printStackTrace();
