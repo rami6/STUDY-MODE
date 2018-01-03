@@ -58,7 +58,7 @@
              <JFXComboBox fx:id="subjectSelector1" layoutX="336.0" layoutY="509.0" onAction="#selector1Action" prefHeight="27.0" prefWidth="287.0" />
              <JFXComboBox fx:id="subjectSelector2" layoutX="779.0" layoutY="509.0" onAction="#selector2Action" prefHeight="27.0" prefWidth="287.0" />
 
-             <BarChart fx:id="timeBarChart" layoutX="254.0" layoutY="536.0" prefHeight="400.0" prefWidth="417.0">
+             <BarChart fx:id="timeBarChart1" layoutX="254.0" layoutY="536.0" prefHeight="400.0" prefWidth="417.0">
                  <xAxis>
                      <NumberAxis side="BOTTOM" />
                  </xAxis>

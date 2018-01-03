@@ -75,16 +75,16 @@ public class HomeViewController implements Initializable {
 
     // spent time chart ----------------------------------------------
     @FXML
-    private BarChart<?, ?> timeBarChart;
+    private BarChart<?, ?> timeBarChart1;
 
     @FXML
     private BarChart<?, ?> timeBarChart2;
 
     @FXML
-    private JFXComboBox<?> subjectSelector1;
+    private JFXComboBox<String> subjectSelector1;
 
     @FXML
-    private JFXComboBox<?> subjectSelector2;
+    private JFXComboBox<String> subjectSelector2;
 
     @FXML
     private CategoryAxis x;
@@ -133,12 +133,13 @@ public class HomeViewController implements Initializable {
         showUserName();
         showTargetHour();
 
-        setSubjectOption();
+        setSubjectOption(subject);
         setTableView();
 
         showDailyStudyTime();
-        setTimeBarChart();
 
+        setSubjectOption(subjectSelector1);
+        setSubjectOption(subjectSelector2);
     }
 
     // user name -----------------------------------------------------
@@ -278,41 +279,46 @@ public class HomeViewController implements Initializable {
 
     // time bar chart -----------------------------------------------------
 
-    void setTimeBarChart() {
-        XYChart.Series set1 = new XYChart.Series<>();
-        timeBarChart.setLegendVisible(false);
-        set1.getData().add(new XYChart.Data(50,"HTML"));
-        set1.getData().add(new XYChart.Data(20,"CSS"));
-        timeBarChart.getData().addAll(set1);
+    void setTimeBarChart(BarChart barChart, JFXComboBox<String> subjectSelector) {
 
-        XYChart.Series set2 = new XYChart.Series<>();
-        timeBarChart2.setLegendVisible(false);
-        set2.getData().add(new XYChart.Data(50,"HTML"));
-        set2.getData().add(new XYChart.Data(20,"CSS"));
-        timeBarChart2.getData().addAll(set2);
+        XYChart.Series set = new XYChart.Series<>();
+        barChart.setLegendVisible(false);
+        String selectedSubject = subjectSelector.getValue();
 
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select category, sum(total_spent_time) as 'sum_time' from todo_table where subject = '" + selectedSubject + "' group by category");
+            while(myRs.next()) {
+                double sumTimeHour = myRs.getLong("sum_time") / 1000.0 / 60 / 60;
+                set.getData().add(new XYChart.Data(sumTimeHour ,myRs.getString("category")));
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        barChart.getData().addAll(set);
     }
 
     @FXML
     void selector1Action(ActionEvent event) {
-
+        setTimeBarChart(timeBarChart1, subjectSelector1);
     }
 
     @FXML
     void selector2Action(ActionEvent event) {
-
+        setTimeBarChart(timeBarChart2, subjectSelector2);
     }
 
     // todothing input field -------------------------------------------------
 
 
-    void setSubjectOption() {
+    void setSubjectOption(JFXComboBox subjectCombo) {
         try {
             Connection myConn = DriverManager.getConnection(msUrl, user, password);
             Statement myStmt = myConn.createStatement();
             ResultSet myRs = myStmt.executeQuery("select * from subject_table");
             while(myRs.next()) {
-                subject.getItems().add(myRs.getString("subject_name"));
+                subjectCombo.getItems().add(myRs.getString("subject_name"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -406,7 +412,7 @@ public class HomeViewController implements Initializable {
     }
 
     void setNewSubject(String str) {
-        setSubjectOption();
+        setSubjectOption(subject);
         subject.setValue(str);
     }
 
