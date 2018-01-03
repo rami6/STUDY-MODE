@@ -10,6 +10,7 @@
         import javafx.fxml.FXMLLoader;
         import javafx.scene.Parent;
         import javafx.scene.Scene;
+        import javafx.scene.chart.*;
         import javafx.scene.control.TreeItem;
         import javafx.scene.control.TreeTableColumn;
         import com.jfoenix.controls.JFXTreeTableColumn;
@@ -70,6 +71,23 @@ public class HomeViewController implements Initializable {
     private JFXTreeTableView<TodoInfo> todoListTable;
     final ObservableList<TodoInfo> todoInfoList = FXCollections.observableArrayList();
 
+    // spent time chart ----------------------------------------------
+    @FXML
+    private BarChart<?, ?> BarChart;
+
+    @FXML
+    private BarChart<?, ?> BarChart2;
+
+
+    @FXML
+    private CategoryAxis x;
+
+    @FXML
+    private NumberAxis y;
+
+    @FXML
+    PieChart PieChart;
+
     // record screen video ----------------------------------------------
     @FXML
     private JFXButton recordBtn;
@@ -103,6 +121,26 @@ public class HomeViewController implements Initializable {
 
         setSubjectOption();
         setTableView();
+
+        XYChart.Series set1 = new XYChart.Series<>();
+        BarChart.setLegendVisible(false);
+        set1.getData().add(new XYChart.Data("HTML",50));
+        set1.getData().add(new XYChart.Data("CSS",20));
+        BarChart.getData().addAll(set1);
+
+        XYChart.Series set2 = new XYChart.Series<>();
+        BarChart2.setLegendVisible(false);
+        set2.getData().add(new XYChart.Data("HTML",50));
+        set2.getData().add(new XYChart.Data("CSS",20));
+        BarChart2.getData().addAll(set2);
+
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("HTML", 60),
+                new PieChart.Data("CSS", 15));
+        PieChart.setData(pieChartData);
+        //remove labels
+        PieChart.setStyle("-fx-pie-label-visible: false;");
+
     }
 
     //search window -----------------------------------------------------
