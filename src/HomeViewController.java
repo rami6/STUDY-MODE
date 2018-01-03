@@ -7,9 +7,6 @@
         import com.jfoenix.controls.JFXDatePicker;
 
         import javafx.beans.property.ReadOnlyObjectWrapper;
-        import javafx.fxml.FXMLLoader;
-        import javafx.scene.Parent;
-        import javafx.scene.Scene;
         import javafx.scene.chart.*;
         import javafx.scene.control.TreeItem;
         import javafx.scene.control.TreeTableColumn;
@@ -23,11 +20,8 @@
         import javafx.fxml.FXML;
         import javafx.fxml.Initializable;
         import javafx.scene.control.*;
-        import javafx.scene.layout.Pane;
-        import javafx.stage.Stage;
         import javafx.util.Callback;
 
-        import java.io.IOException;
         import java.net.URL;
         import java.sql.Connection;
         import java.sql.DriverManager;
@@ -39,6 +33,14 @@
 public class HomeViewController implements Initializable {
 
     //[Declarations]
+
+    // user name -----------------------------------------------------
+    @FXML
+    private JFXTextField userName;
+
+    // target study time -----------------------------------------------------
+    @FXML
+    private JFXTextField targetHour;
 
     //search window -----------------------------------------------------
     @FXML
@@ -73,11 +75,16 @@ public class HomeViewController implements Initializable {
 
     // spent time chart ----------------------------------------------
     @FXML
-    private BarChart<?, ?> BarChart;
+    private BarChart<?, ?> timeBarChart;
 
     @FXML
-    private BarChart<?, ?> BarChart2;
+    private BarChart<?, ?> timeBarChart2;
 
+    @FXML
+    private JFXComboBox<?> subjectSelector1;
+
+    @FXML
+    private JFXComboBox<?> subjectSelector2;
 
     @FXML
     private CategoryAxis x;
@@ -86,7 +93,12 @@ public class HomeViewController implements Initializable {
     private NumberAxis y;
 
     @FXML
-    PieChart PieChart;
+    PieChart timePieChart;
+
+    // date pick ----------------------------------------------
+
+    @FXML
+    private JFXDatePicker datePicker;
 
     // record screen video ----------------------------------------------
     @FXML
@@ -104,9 +116,6 @@ public class HomeViewController implements Initializable {
     @FXML
     private JFXTextField selectedDate;
 
-    @FXML
-    private JFXDatePicker datePicker;
-
     // information to access sql ------------------------------------------
     String msUrl = "jdbc:mysql://localhost:3306/studymode_db";
     String user = "root";
@@ -119,28 +128,78 @@ public class HomeViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        showUserName();
+        showTargetHour();
+
         setSubjectOption();
         setTableView();
 
-        XYChart.Series set1 = new XYChart.Series<>();
-        BarChart.setLegendVisible(false);
-        set1.getData().add(new XYChart.Data("HTML",50));
-        set1.getData().add(new XYChart.Data("CSS",20));
-        BarChart.getData().addAll(set1);
+        setDailyTimePieChart();
+        setTimeBarChart();
 
-        XYChart.Series set2 = new XYChart.Series<>();
-        BarChart2.setLegendVisible(false);
-        set2.getData().add(new XYChart.Data("HTML",50));
-        set2.getData().add(new XYChart.Data("CSS",20));
-        BarChart2.getData().addAll(set2);
+    }
 
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("HTML", 60),
-                new PieChart.Data("CSS", 15));
-        PieChart.setData(pieChartData);
-        //remove labels
-        PieChart.setStyle("-fx-pie-label-visible: false;");
+    // user name -----------------------------------------------------
+    @FXML
+    void userNameAction(ActionEvent event) {
+        String userNameStr = userName.getText();
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            String sql = "update user_profile_table SET user_name ='" + userNameStr + "' WHERE user_id = 1";
+            myStmt.executeUpdate(sql);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    void showUserName() {
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select * from user_profile_table where user_id = 1");
+            while(myRs.next()) {
+                userName.setText(myRs.getString("user_name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    // target study time -----------------------------------------------------
+
+    @FXML
+    void targetHourAction(ActionEvent event) {
+        String targetHpurStr = targetHour.getText();
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            String sql = "update user_profile_table SET target_hour ='" + targetHpurStr + "' WHERE user_id = 1";
+            myStmt.executeUpdate(sql);
+            showTargetHour();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void showTargetHour() {
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select * from user_profile_table where user_id = 1");
+            while(myRs.next()) {
+                String hourStr = myRs.getString("target_hour");
+                if (hourStr.equals("0")) {
+                    targetHour.setPromptText("Target study hour");
+                } else {
+                    targetHour.setText("Study " + hourStr + " hours/day!");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //search window -----------------------------------------------------
@@ -159,6 +218,50 @@ public class HomeViewController implements Initializable {
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // date pick ------------------------------------------------------
+    @FXML
+    void datePickAction(ActionEvent event) {
+
+    }
+
+    // daily time pie chart -----------------------------------------------------
+
+    void setDailyTimePieChart() {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("HTML", 60),
+                new PieChart.Data("CSS", 15));
+        timePieChart.setData(pieChartData);
+        //remove labels
+        timePieChart.setStyle("-fx-pie-label-visible: false;");
+    }
+
+    // time bar chart -----------------------------------------------------
+
+    void setTimeBarChart() {
+        XYChart.Series set1 = new XYChart.Series<>();
+        timeBarChart.setLegendVisible(false);
+        set1.getData().add(new XYChart.Data(50,"HTML"));
+        set1.getData().add(new XYChart.Data(20,"CSS"));
+        timeBarChart.getData().addAll(set1);
+
+        XYChart.Series set2 = new XYChart.Series<>();
+        timeBarChart2.setLegendVisible(false);
+        set2.getData().add(new XYChart.Data(50,"HTML"));
+        set2.getData().add(new XYChart.Data(20,"CSS"));
+        timeBarChart2.getData().addAll(set2);
+
+    }
+
+    @FXML
+    void selector1Action(ActionEvent event) {
+
+    }
+
+    @FXML
+    void selector2Action(ActionEvent event) {
+
     }
 
     // todothing input field -------------------------------------------------

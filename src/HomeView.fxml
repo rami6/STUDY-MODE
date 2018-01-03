@@ -3,7 +3,6 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
-<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.chart.BarChart?>
@@ -20,49 +19,66 @@
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1500.0" prefWidth="1181.0">
          <children>
-            <!--search window-->
+             <!--side area_____________________________________________________________________________________________________________________________ -->
+             <!--user name-->
+             <JFXTextField fx:id="userName" layoutX="21.0" layoutY="20.0" onAction="#userNameAction" />
+
+             <!--setting-->
+             <JFXTextField fx:id="targetHour" layoutX="21.0" layoutY="74.0" onAction="#targetHourAction" />
+             <JFXTextField layoutX="21.0" layoutY="314.0" text="SETTING" />
+
+             <!--main area_____________________________________________________________________________________________________________________________ -->
+             <!--date picker-->
+             <JFXDatePicker fx:id="datePicker" layoutX="254.0" layoutY="112.0" onAction="#datePickAction" />
+
+             <!--daily total study time-->
+             <JFXTextField alignment="CENTER" editable="false" layoutX="254.0" layoutY="153.0" prefHeight="27.0" prefWidth="53.0" text="Total" />
+             <JFXTextField fx:id="dailyTotalTime" alignment="CENTER" layoutX="254.0" layoutY="188.0" prefHeight="68.0" prefWidth="208.0">
+                 <font>
+                     <Font size="31.0" />
+                 </font>
+             </JFXTextField>
+
+             <!--target-actual study time pie chart-->
+             <PieChart fx:id="timePieChart" layoutX="243.0" layoutY="267.0" prefHeight="226.0" prefWidth="236.0" />
+
+             <!--search window-->
             <TextField fx:id="search" layoutX="391.0" layoutY="47.0" onAction="#searchWeb" prefHeight="27.0" prefWidth="302.0" promptText="Let's Googling!" />
+
             <!--task input field-->
             <Button fx:id="ok" layoutX="1102.0" layoutY="113.0" mnemonicParsing="false" onAction="#addNewTodo" text="OK!" />
             <JFXTextField fx:id="todo" layoutX="796.0" layoutY="113.0" onAction="#addNewTodo" prefHeight="27.0" prefWidth="295.0" promptText="To Do" />
-      
+
             <!--todolist with timer-->
             <JFXTreeTableView fx:id="todoListTable" layoutX="495.0" layoutY="153.0" prefHeight="321.0" prefWidth="656.0" />
             <JFXComboBox fx:id="subject" layoutX="495.0" layoutY="113.0" onAction="#subjectAction" prefHeight="27.0" prefWidth="136.0" promptText="Subject" />
             <JFXComboBox fx:id="category" layoutX="647.0" layoutY="113.0" onAction="#categoryAction" prefHeight="27.0" prefWidth="132.0" promptText="Category" />
 
-            <!--dammy-->
-            <JFXTextField fx:id="dailyTotalTime" alignment="CENTER" layoutX="254.0" layoutY="193.0" prefHeight="68.0" prefWidth="208.0">
-               <font>
-                  <Font size="31.0" />
-               </font>
-            </JFXTextField>
-            <JFXTextField fx:id="selectedDate" layoutX="254.0" layoutY="113.0" prefHeight="23.0" prefWidth="208.0" />
-            <JFXTextField alignment="CENTER" editable="false" layoutX="254.0" layoutY="153.0" prefHeight="27.0" prefWidth="53.0" text="Total" />
-            <JFXDatePicker fx:id="datePicker" layoutX="21.0" layoutY="139.0" promptText="Calender??" />
-            <JFXTextField layoutX="21.0" layoutY="314.0" text="SETTING" />
+            <!--study time bar chart -->
+             <JFXComboBox fx:id="subjectSelector1" layoutX="336.0" layoutY="509.0" onAction="#selector1Action" prefHeight="27.0" prefWidth="287.0" />
+             <JFXComboBox fx:id="subjectSelector2" layoutX="779.0" layoutY="509.0" onAction="#selector2Action" prefHeight="27.0" prefWidth="287.0" />
 
-            <BarChart fx:id="BarChart" layoutX="254.0" layoutY="517.0" title="Barchart">
+             <BarChart fx:id="timeBarChart" layoutX="254.0" layoutY="536.0" prefHeight="400.0" prefWidth="417.0">
                  <xAxis>
-                     <CategoryAxis label="Subject" side="BOTTOM" />
+                     <NumberAxis side="BOTTOM" />
                  </xAxis>
                  <yAxis>
-                     <NumberAxis side="LEFT" />
+                     <CategoryAxis label="Subject" side="LEFT" />
                  </yAxis>
              </BarChart>
-            <BarChart fx:id="BarChart2" layoutX="693.0" layoutY="517.0" title="Barchart">
+            <BarChart fx:id="timeBarChart2" layoutX="693.0" layoutY="536.0" prefHeight="400.0" prefWidth="417.0">
                 <xAxis>
-                    <CategoryAxis label="Subject" side="BOTTOM" />
+                    <NumberAxis side="BOTTOM" />
                 </xAxis>
                 <yAxis>
-                    <NumberAxis side="LEFT" />
+                    <CategoryAxis label="Subject" side="LEFT" />
                 </yAxis>
             </BarChart>
-            <JFXTextArea layoutX="401.0" layoutY="755.0" promptText="note area" />
-            <JFXTextField layoutX="21.0" layoutY="20.0" text="User Name" />
+
+            <!--record video-->
             <JFXButton fx:id="recordBtn" layoutX="993.0" layoutY="20.0" onAction="#startStopRecord" prefHeight="27.0" prefWidth="81.0" text="Record" />
             <JFXButton fx:id="watchBtn" layoutX="1085.0" layoutY="20.0" onAction="#openVideoFolder" prefHeight="27.0" prefWidth="81.0" text="Watch" />
-            <PieChart fx:id="PieChart" layoutX="243.0" layoutY="277.0" prefHeight="216.0" prefWidth="236.0" />
+
          </children>
       </AnchorPane>
   </content>
