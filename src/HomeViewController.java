@@ -100,6 +100,14 @@ public class HomeViewController implements Initializable {
     @FXML
     private JFXDatePicker datePicker;
 
+    // daily study time ----------------------------------------------
+
+    @FXML
+    private JFXTextField dailyTotalTime;
+
+    @FXML
+    private JFXTextField selectedDate;
+
     // record screen video ----------------------------------------------
     @FXML
     private JFXButton recordBtn;
@@ -108,13 +116,7 @@ public class HomeViewController implements Initializable {
     private JFXButton watchBtn;
 
 
-    // dammy ----------------------------------------------
 
-    @FXML
-    private JFXTextField dailyTotalTime;
-
-    @FXML
-    private JFXTextField selectedDate;
 
     // information to access sql ------------------------------------------
     String msUrl = "jdbc:mysql://localhost:3306/studymode_db";
@@ -134,7 +136,7 @@ public class HomeViewController implements Initializable {
         setSubjectOption();
         setTableView();
 
-        setDailyTimePieChart();
+        showDailyStudyTime();
         setTimeBarChart();
 
     }
@@ -226,12 +228,49 @@ public class HomeViewController implements Initializable {
 
     }
 
-    // daily time pie chart -----------------------------------------------------
+    // daily time watch  ------------------------------------------------------
+    double actualStudyTime = 0;
+    void showDailyStudyTime() {
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select * from daily_studytime_table where study_date = '2018-01-03'");
+            //datePicker.getValue()
+            while(myRs.next()) {
+                actualStudyTime = myRs.getDouble("study_time");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    void setDailyTimePieChart() {
+        // Animation timer
+        String text;
+        //dailyTotalTime.setText(text);
+        setDailyTimePieChart(actualStudyTime);
+    }
+
+
+    // daily time pie chart-----------------------------------------------------
+
+    void setDailyTimePieChart(double actualStudyTime) {
+        int targetStudyTime = 0;
+        double actualStudyTimeHour = 0;
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select * from user_profile_table where user_id = 1");
+            while(myRs.next()) {
+                targetStudyTime = myRs.getInt("target_hour");
+            }
+            actualStudyTimeHour = actualStudyTime / 1000 / 60 / 60;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        double gap = targetStudyTime - actualStudyTimeHour;
+
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("HTML", 60),
-                new PieChart.Data("CSS", 15));
+                new PieChart.Data("Actual", actualStudyTimeHour),
+                new PieChart.Data("Gap", gap));
         timePieChart.setData(pieChartData);
         //remove labels
         timePieChart.setStyle("-fx-pie-label-visible: false;");
