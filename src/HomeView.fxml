@@ -57,6 +57,8 @@
             <JFXComboBox fx:id="subject" layoutX="495.0" layoutY="113.0" onAction="#subjectAction" prefHeight="27.0" prefWidth="136.0" promptText="Subject" />
             <JFXComboBox fx:id="category" layoutX="647.0" layoutY="113.0" onAction="#categoryAction" prefHeight="27.0" prefWidth="132.0" promptText="Category" />
 
+             <JFXButton fx:id="editTodoBtn" layoutX="1093.0" layoutY="480.0" onAction="#openEditWindow" text="Edit" />
+
             <!--study time bar chart -->
              <JFXComboBox fx:id="subjectSelector1" layoutX="336.0" layoutY="509.0" onAction="#selector1Action" prefHeight="27.0" prefWidth="287.0" />
              <JFXComboBox fx:id="subjectSelector2" layoutX="779.0" layoutY="509.0" onAction="#selector2Action" prefHeight="27.0" prefWidth="287.0" />
@@ -91,6 +93,7 @@
             <!--record video-->
             <JFXButton fx:id="recordBtn" layoutX="993.0" layoutY="20.0" onAction="#startStopRecord" prefHeight="27.0" prefWidth="81.0" text="Record" />
             <JFXButton fx:id="watchBtn" layoutX="1085.0" layoutY="20.0" onAction="#openVideoFolder" prefHeight="27.0" prefWidth="81.0" text="Watch" />
+
          </children>
       </AnchorPane>
   </content>

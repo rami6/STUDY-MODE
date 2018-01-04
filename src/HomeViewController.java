@@ -6,7 +6,11 @@
         import com.jfoenix.controls.JFXComboBox;
         import com.jfoenix.controls.JFXDatePicker;
 
+        import javafx.beans.Observable;
         import javafx.beans.property.ReadOnlyObjectWrapper;
+        import javafx.fxml.FXMLLoader;
+        import javafx.scene.Parent;
+        import javafx.scene.Scene;
         import javafx.scene.chart.*;
         import javafx.scene.control.TreeItem;
         import javafx.scene.control.TreeTableColumn;
@@ -20,8 +24,11 @@
         import javafx.fxml.FXML;
         import javafx.fxml.Initializable;
         import javafx.scene.control.*;
+        import javafx.stage.Stage;
         import javafx.util.Callback;
 
+        import java.io.File;
+        import java.io.IOException;
         import java.net.URL;
         import java.sql.Connection;
         import java.sql.DriverManager;
@@ -72,6 +79,9 @@ public class HomeViewController implements Initializable {
     @FXML
     private JFXTreeTableView<TodoInfo> todoListTable;
     final ObservableList<TodoInfo> todoInfoList = FXCollections.observableArrayList();
+
+    @FXML
+    private JFXButton doneBtn;
 
     // spent time chart ----------------------------------------------
     @FXML
@@ -522,7 +532,11 @@ public class HomeViewController implements Initializable {
                 String c = myRs.getString("category");
                 String t = myRs.getString("todo");
                 Long tsTime = myRs.getLong("total_spent_time");
-                todoInfoList.add(new TodoInfo(i, s, c, t, tsTime));
+                boolean isDone = myRs.getBoolean("isDone");
+                boolean isVisible = myRs.getBoolean("isVisible");
+                if (!isDone && isVisible) {
+                    todoInfoList.add(new TodoInfo(i, s, c, t, tsTime, isDone, isVisible));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -532,6 +546,21 @@ public class HomeViewController implements Initializable {
         todoListTable.getColumns().setAll(subjectCl, categoryCl, todoCl, timerCl, switchCl);
         todoListTable.setRoot(root);
         todoListTable.setShowRoot(false);
+    }
+
+    @FXML
+    void openEditWindow(ActionEvent event) {
+
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("TodoEditView.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Edit Todo");
+            stage.setScene(new Scene(root, 655, 680));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     // note -------------------------------------------------------------

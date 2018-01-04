@@ -1,10 +1,16 @@
 /* Created by Miho */
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextInputDialog;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,18 +18,23 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 class TodoInfo extends RecursiveTreeObject<TodoInfo> {
     int todoId;
     String subject;
     String category;
     String todo;
+    boolean isDone;
+    boolean isVisible;
     StringProperty subjectSP;
     StringProperty categorySP;
     StringProperty todoSP;
     AnimationTimer timer;
     StringProperty display;
     JFXButton switchButton;
+    JFXCheckBox doneCheck;
+    JFXButton deleteButton;
 
     java.sql.Timestamp startTime;
     java.sql.Timestamp stopTime;
@@ -35,11 +46,13 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
     String password = "";
     //---------------------------------------------------------------------
 
-    public TodoInfo(int todoId, String subject, String category, String todo, Long totalSpentTime) {
+    public TodoInfo(int todoId, String subject, String category, String todo, Long totalSpentTime, boolean isDone, boolean isVisible) {
         this.todoId = todoId;
         this.subject = subject;
         this.category = category;
         this.todo = todo;
+        this.isDone = isDone;
+        this.isVisible = isVisible;
         this.subjectSP = new SimpleStringProperty(subject);
         this.categorySP = new SimpleStringProperty(category);
         this.todoSP = new SimpleStringProperty(todo);
@@ -62,6 +75,13 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
         this.timer = getTimer(totalSpentSec);
         this.switchButton = new JFXButton("Start");
         switchButton.setOnAction(e -> toggleStartStop(switchButton));
+        this.doneCheck = new JFXCheckBox();
+        if (isDone) {
+            doneCheck.setSelected(true);
+        }
+        doneCheck.setOnAction(e -> toggleIsDone());
+        this.deleteButton = new JFXButton("Delete");
+        deleteButton.setOnAction(e -> deleteTodo());
     }
 
     public AnimationTimer getTimer(Long totalSpentSec) {
@@ -155,5 +175,55 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
                 e.printStackTrace();
             }
         }
+    }
+
+    void toggleIsDone() {
+
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            if (doneCheck.isSelected()) {
+                String sql = "update todo_table SET isDone = '1' WHERE todo_id = " + todoId;
+                myStmt.executeUpdate(sql);
+            } else {
+                String sql = "update todo_table SET isDone = '0' WHERE todo_id = " + todoId;
+                myStmt.executeUpdate(sql);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteTodo() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you OK to delete \"" + todo + "\"?");
+        alert.setGraphic(null);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            try {
+                Connection myConn = DriverManager.getConnection(msUrl, user, password);
+                Statement myStmt = myConn.createStatement();
+                String sql = "update todo_table SET isVisible = '0' WHERE todo_id = " + todoId;
+                myStmt.execute(sql);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return subject + ", " + category + ", " + todo;
+    }
+
+    public int getTodoId() {
+        return todoId;
+    }
+
+    public boolean isDone() {
+        return isDone;
     }
 }
