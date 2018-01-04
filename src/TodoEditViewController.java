@@ -116,7 +116,7 @@ public class TodoEditViewController implements Initializable {
         deleteCl1.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton>, ObservableValue<JFXButton>>() {
             @Override
             public ObservableValue<JFXButton> call(TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton> param) {
-                return new ReadOnlyObjectWrapper(param.getValue().getValue().deleteButton);
+                return new ReadOnlyObjectWrapper(param.getValue().getValue().deleteCheck);
             }
         });
 
@@ -165,7 +165,7 @@ public class TodoEditViewController implements Initializable {
         deleteCl2.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton>, ObservableValue<JFXButton>>() {
             @Override
             public ObservableValue<JFXButton> call(TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton> param) {
-                return new ReadOnlyObjectWrapper(param.getValue().getValue().deleteButton);
+                return new ReadOnlyObjectWrapper(param.getValue().getValue().deleteCheck);
             }
         });
 

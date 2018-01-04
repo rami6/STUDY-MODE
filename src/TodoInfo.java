@@ -34,7 +34,7 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
     StringProperty display;
     JFXButton switchButton;
     JFXCheckBox doneCheck;
-    JFXButton deleteButton;
+    JFXCheckBox deleteCheck;
 
     java.sql.Timestamp startTime;
     java.sql.Timestamp stopTime;
@@ -80,8 +80,8 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
             doneCheck.setSelected(true);
         }
         doneCheck.setOnAction(e -> toggleIsDone());
-        this.deleteButton = new JFXButton("Delete");
-        deleteButton.setOnAction(e -> deleteTodo());
+        this.deleteCheck = new JFXCheckBox();
+        deleteCheck.setOnAction(e -> deleteTodo());
     }
 
     public AnimationTimer getTimer(Long totalSpentSec) {
@@ -195,18 +195,28 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
     }
 
     public void deleteTodo() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Confirmation");
-        alert.setHeaderText(null);
-        alert.setContentText("Are you OK to delete \"" + todo + "\"?");
-        alert.setGraphic(null);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if(deleteCheck.isSelected()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Confirmation");
+            alert.setHeaderText(null);
+            alert.setContentText("Are you OK to delete \"" + todo + "\"?");
+            alert.setGraphic(null);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                try {
+                    Connection myConn = DriverManager.getConnection(msUrl, user, password);
+                    Statement myStmt = myConn.createStatement();
+                    String sql = "update todo_table SET isVisible = '0' WHERE todo_id = " + todoId;
+                    myStmt.execute(sql);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
             try {
                 Connection myConn = DriverManager.getConnection(msUrl, user, password);
                 Statement myStmt = myConn.createStatement();
-                String sql = "update todo_table SET isVisible = '0' WHERE todo_id = " + todoId;
+                String sql = "update todo_table SET isVisible = '1' WHERE todo_id = " + todoId;
                 myStmt.execute(sql);
             } catch (Exception e) {
                 e.printStackTrace();
