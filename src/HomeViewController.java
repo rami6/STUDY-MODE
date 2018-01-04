@@ -34,6 +34,7 @@
         import java.sql.DriverManager;
         import java.sql.ResultSet;
         import java.sql.Statement;
+        import java.time.LocalDate;
         import java.util.Optional;
         import java.util.ResourceBundle;
 
@@ -160,6 +161,9 @@ public class HomeViewController implements Initializable {
 
         setSubjectOption(subjectSelector1);
         setSubjectOption(subjectSelector2);
+
+        setDefaultDate();
+
     }
 
     // user name -----------------------------------------------------
@@ -247,6 +251,10 @@ public class HomeViewController implements Initializable {
     @FXML
     void datePickAction(ActionEvent event) {
 
+    }
+
+    void setDefaultDate() {
+        datePicker.setValue(LocalDate.now());
     }
 
     // daily time watch  ------------------------------------------------------
