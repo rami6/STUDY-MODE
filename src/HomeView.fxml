@@ -3,6 +3,8 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.chart.BarChart?>
@@ -13,6 +15,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <ScrollPane prefHeight="793.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeViewController">
@@ -75,10 +78,19 @@
                 </yAxis>
             </BarChart>
 
+             <!--note-->
+             <Pane layoutX="280.0" layoutY="1000" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+                 <children>
+                     <JFXListView fx:id="noteList" layoutY="69.0" prefHeight="286.0" prefWidth="216.0" />
+                     <JFXTextArea fx:id="noteEditArea" layoutX="229.0" layoutY="69.0" prefHeight="325.0" prefWidth="369.0" promptText="Enter note" />
+                     <JFXButton fx:id="noteSaveBtn" layoutX="515.0" layoutY="407.0" onAction="#saveNote" text="Save" />
+                     <JFXButton fx:id="newNoteBtn" layoutX="170.0" layoutY="367.0" onAction="#createNewNote" text="New" />
+                 </children>
+             </Pane>
+
             <!--record video-->
             <JFXButton fx:id="recordBtn" layoutX="993.0" layoutY="20.0" onAction="#startStopRecord" prefHeight="27.0" prefWidth="81.0" text="Record" />
             <JFXButton fx:id="watchBtn" layoutX="1085.0" layoutY="20.0" onAction="#openVideoFolder" prefHeight="27.0" prefWidth="81.0" text="Watch" />
-
          </children>
       </AnchorPane>
   </content>

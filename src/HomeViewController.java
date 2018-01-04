@@ -108,15 +108,25 @@ public class HomeViewController implements Initializable {
     @FXML
     private JFXTextField selectedDate;
 
+    // note ------------------------------------------------------------
+    @FXML
+    private JFXListView noteList;
+
+    @FXML
+    private JFXTextArea noteEditArea;
+
+    @FXML
+    private JFXButton noteSaveBtn;
+
+    @FXML
+    private JFXButton newNoteBtn;
+
     // record screen video ----------------------------------------------
     @FXML
     private JFXButton recordBtn;
 
     @FXML
     private JFXButton watchBtn;
-
-
-
 
     // information to access sql ------------------------------------------
     String msUrl = "jdbc:mysql://localhost:3306/studymode_db";
@@ -291,7 +301,8 @@ public class HomeViewController implements Initializable {
             ResultSet myRs = myStmt.executeQuery("select category, sum(total_spent_time) as 'sum_time' from todo_table where subject = '" + selectedSubject + "' group by category");
             while(myRs.next()) {
                 double sumTimeHour = myRs.getLong("sum_time") / 1000.0 / 60 / 60;
-                set.getData().add(new XYChart.Data(sumTimeHour ,myRs.getString("category")));
+                String legend = myRs.getString("category");
+                set.getData().add(new XYChart.Data(sumTimeHour, legend));
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -521,6 +532,17 @@ public class HomeViewController implements Initializable {
         todoListTable.getColumns().setAll(subjectCl, categoryCl, todoCl, timerCl, switchCl);
         todoListTable.setRoot(root);
         todoListTable.setShowRoot(false);
+    }
+
+    // note -------------------------------------------------------------
+    @FXML
+    void createNewNote(ActionEvent event) {
+
+    }
+
+    @FXML
+    void saveNote(ActionEvent event) {
+
     }
 
     // record screen video ----------------------------------------------
