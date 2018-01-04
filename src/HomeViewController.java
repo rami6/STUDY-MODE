@@ -157,12 +157,12 @@ public class HomeViewController implements Initializable {
         setSubjectOption(subject);
         setTableView();
 
+        setDefaultDate();
+
         showDailyStudyTime();
 
         setSubjectOption(subjectSelector1);
         setSubjectOption(subjectSelector2);
-
-        setDefaultDate();
 
     }
 
@@ -250,7 +250,7 @@ public class HomeViewController implements Initializable {
     // date pick ------------------------------------------------------
     @FXML
     void datePickAction(ActionEvent event) {
-
+        showDailyStudyTime();
     }
 
     void setDefaultDate() {
@@ -258,12 +258,13 @@ public class HomeViewController implements Initializable {
     }
 
     // daily time watch  ------------------------------------------------------
-    double actualStudyTime = 0;
+
     void showDailyStudyTime() {
+        double actualStudyTime = 0;
         try {
             Connection myConn = DriverManager.getConnection(msUrl, user, password);
             Statement myStmt = myConn.createStatement();
-            ResultSet myRs = myStmt.executeQuery("select * from daily_studytime_table where study_date = '2018-01-03'");
+            ResultSet myRs = myStmt.executeQuery("select * from daily_studytime_table where study_date = '" + datePicker.getValue() + "'");
             //datePicker.getValue()
             while(myRs.next()) {
                 actualStudyTime = myRs.getDouble("study_time");
