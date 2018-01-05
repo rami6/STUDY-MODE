@@ -350,7 +350,7 @@ public class HomeViewController implements Initializable {
         XYChart.Series set = new XYChart.Series<>();
         timeBarChart2.setLegendVisible(false);
         String selectedSubject = subjectSelector.getValue();
-        
+
         subjectSelector.setValue("Programming");
 
         try {
@@ -362,7 +362,6 @@ public class HomeViewController implements Initializable {
                 sumTimeHour = (double)Math.round(sumTimeHour * 100)/100;
                 String categoryName = myRs.getString("category");
                 set.getData().add(new XYChart.Data(sumTimeHour, categoryName));
-                System.out.println(new XYChart.Data(sumTimeHour, categoryName));
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -594,7 +593,7 @@ public class HomeViewController implements Initializable {
             Parent root = FXMLLoader.load(getClass().getResource("TodoEditView.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Edit Todo");
-            stage.setScene(new Scene(root, 655, 680));
+            stage.setScene(new Scene(root, 655, 700));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
