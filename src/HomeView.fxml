@@ -164,6 +164,7 @@
                                 <JFXTextField fx:id="todo" focusColor="#14b9d6" layoutX="518.0" layoutY="16.0" onAction="#addNewTodo" prefHeight="27.0" prefWidth="326.0" promptText="To Do" />
                                 <Button fx:id="ok" layoutX="856.0" layoutY="14.0" mnemonicParsing="false" onAction="#addNewTodo" prefHeight="32.0" prefWidth="72.0" style="-fx-background-color: #14b9d6;" text="OK!" textFill="WHITE" />
                                 <JFXTreeTableView fx:id="todoListTable" layoutX="260.0" layoutY="58.0" prefHeight="327.0" prefWidth="672.0" />
+                        <Button fx:id="refreshTableBtn" layoutX="812.0" layoutY="392.0" mnemonicParsing="false" onAction="#refreshTable" prefHeight="27.0" prefWidth="117.0" style="-fx-background-color: #14b9d6;" text="Refresh Table" textFill="WHITE" />
                         <JFXTextField fx:id="dailyTotalTime" alignment="CENTER" layoutX="33.0" layoutY="88.0" prefHeight="46.0" prefWidth="177.0">
                            <font>
                               <Font size="31.0" />
@@ -199,15 +200,16 @@
                                         <CategoryAxis side="LEFT" />
                                     </yAxis>
                                 </BarChart>
+                        <JFXTextField alignment="CENTER" editable="false" layoutX="183.0" layoutY="31.0" text="by Subject" />
                             </children>
                         </Pane>
                         <Pane prefHeight="540.0" prefWidth="920.0">
                             <children>
                                 <JFXListView fx:id="noteList" layoutX="54.0" layoutY="54.0" prefHeight="350.0" prefWidth="300.0" />
                                 <JFXTextArea fx:id="noteEditArea" layoutX="388.0" layoutY="75.0" prefHeight="322.0" prefWidth="393.0" promptText="Enter note" />
-                                <JFXButton fx:id="noteSaveBtn" layoutX="733.0" layoutY="414.0" onAction="#saveNote" text="Save" />
-                                <JFXButton fx:id="newNoteBtn" layoutX="294.0" layoutY="414.0" onAction="#createNewNote" prefHeight="27.0" prefWidth="54.0" text="New" />
-                        <JFXButton fx:id="newNoteBtn1" layoutX="221.0" layoutY="414.0" onAction="#createNewNote" text="Delete" />
+                                <Button fx:id="noteSaveBtn" layoutX="733.0" layoutY="414.0" mnemonicParsing="false" onAction="#saveNote" style="-fx-background-color: #14b9d6;" text="Save" textFill="WHITE" />
+                                <Button fx:id="newNoteBtn" layoutX="294.0" layoutY="414.0" mnemonicParsing="false" onAction="#createNewNote" prefHeight="27.0" prefWidth="54.0" style="-fx-background-color: #14b9d6;" text="New" textFill="WHITE" />
+                        <Button fx:id="deleteBtn" layoutX="221.0" layoutY="414.0" mnemonicParsing="false" onAction="#createNewNote" style="-fx-background-color: #14b9d6;" text="Delete" textFill="WHITE" />
                             </children>
                         </Pane>
                     </children>

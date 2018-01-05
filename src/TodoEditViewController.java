@@ -50,7 +50,7 @@ public class TodoEditViewController implements Initializable {
     private JFXTreeTableView<TodoInfo> doneTable;
 
     @FXML
-    private JFXButton refreshBtn;
+    private Button refreshBtn;
 
 
 

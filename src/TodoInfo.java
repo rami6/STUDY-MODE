@@ -7,10 +7,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,7 +29,7 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
     StringProperty todoSP;
     AnimationTimer timer;
     StringProperty display;
-    JFXButton switchButton;
+    Button switchButton;
     JFXCheckBox doneCheck;
     JFXCheckBox deleteCheck;
 
@@ -73,7 +70,7 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
 
         this.display = new SimpleStringProperty(hStr + ":" + new SimpleDateFormat("mm:ss").format(new Date(totalSpentTime)));
         this.timer = getTimer(totalSpentSec);
-        this.switchButton = new JFXButton("Start");
+        this.switchButton = new Button("Start");
         switchButton.setOnAction(e -> toggleStartStop(switchButton));
         this.doneCheck = new JFXCheckBox();
         if (isDone) {
@@ -131,7 +128,7 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
         return timer;
     }
 
-    void toggleStartStop(JFXButton switchButton) {
+    void toggleStartStop(Button switchButton) {
 
         if(switchButton.getText().equals("Start")) {
             timer.start();
