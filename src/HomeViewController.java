@@ -6,6 +6,7 @@
         import com.jfoenix.controls.JFXComboBox;
         import com.jfoenix.controls.JFXDatePicker;
 
+        import javafx.animation.AnimationTimer;
         import javafx.beans.Observable;
         import javafx.beans.property.ReadOnlyObjectWrapper;
         import javafx.fxml.FXMLLoader;
@@ -35,13 +36,16 @@
         import java.sql.DriverManager;
         import java.sql.ResultSet;
         import java.sql.Statement;
+        import java.text.SimpleDateFormat;
         import java.time.LocalDate;
+        import java.util.Date;
         import java.util.Optional;
         import java.util.ResourceBundle;
 
 public class HomeViewController implements Initializable {
 
     //[Declarations]
+    long dailyStudyTime;
 
     // user name -----------------------------------------------------
     @FXML
@@ -102,6 +106,7 @@ public class HomeViewController implements Initializable {
     private JFXDatePicker datePicker;
 
     // daily study time ----------------------------------------------
+    private static AnimationTimer dailyTimer;
 
     @FXML
     private JFXTextField dailyTotalTime;
@@ -151,6 +156,8 @@ public class HomeViewController implements Initializable {
         setDefaultDate();
 
         showDailyStudyTime();
+        setInitialTime(dailyStudyTime / 1000);
+        setDailyTimer(dailyStudyTime / 1000);
 
         setTimeBarChartBySubject();
         setSubjectOption(subjectSelector);
@@ -249,32 +256,101 @@ public class HomeViewController implements Initializable {
         datePicker.setValue(LocalDate.now());
     }
 
+    LocalDate getPickedDate() {
+        return datePicker.getValue();
+    }
+
     // daily time watch  ------------------------------------------------------
 
     void showDailyStudyTime() {
-        double actualStudyTime = 0;
         try {
             Connection myConn = DriverManager.getConnection(msUrl, user, password);
             Statement myStmt = myConn.createStatement();
             ResultSet myRs = myStmt.executeQuery("select * from daily_studytime_table where study_date = '" + datePicker.getValue() + "'");
             //datePicker.getValue()
             while(myRs.next()) {
-                actualStudyTime = myRs.getDouble("study_time");
+                dailyStudyTime = myRs.getLong("study_time");
             }
         }catch (Exception e) {
             e.printStackTrace();
         }
-
-        // Animation timer
-        String text;
-        //dailyTotalTime.setText(text);
-        setDailyTimePieChart(actualStudyTime);
+        
+        setDailyTimePieChart(dailyStudyTime);
     }
+
+    void setInitialTime(long actualStudySec) {
+        long hours = actualStudySec / (60 * 60);
+        String hStr = Long.toString(hours);
+        if (hours < 100) {
+            hStr = String.format("%02d", hours);
+        } else if (hours < 1000) {
+            hStr = String.format("%03d", hours);
+        } else if (hours < 10000) {
+            hStr = String.format("%04d", hours);
+        } else {
+            hStr = "OVER";
+        }
+        dailyTotalTime.setText(hStr + ":" + new SimpleDateFormat("mm").format(new Date(actualStudySec * 1000)));
+    }
+
+    void setDailyTimer(long actualStudySec) {
+        dailyTimer = new AnimationTimer() {
+            private long timestamp;
+            private long time = actualStudySec;
+            private long fraction = 0;
+
+            @Override
+            public void start() {
+                // current time adjusted by remaining time from last run
+                timestamp = System.currentTimeMillis() - fraction;
+                super.start();
+            }
+
+            @Override
+            public void stop() {
+                super.stop();
+                // save leftover time not handled with the last update
+                fraction = System.currentTimeMillis() - timestamp;
+            }
+
+            @Override
+            public void handle(long now) {
+                long newTime = System.currentTimeMillis();
+                if (timestamp + 1000 <= newTime) {
+                    long deltaT = (newTime - timestamp) / 1000;
+                    time += deltaT;
+                    timestamp += 1000 * deltaT;
+                    long hours = time / (60 * 60);
+                    String hStr = Long.toString(hours);
+                    if (hours < 100) {
+                        hStr = String.format("%02d", hours);
+                    } else if (hours < 1000) {
+                        hStr = String.format("%03d", hours);
+                    } else if (hours < 10000) {
+                        hStr = String.format("%04d", hours);
+                    } else {
+                        hStr = "OVER";
+                    }
+                    dailyTotalTime.setText(hStr + ":" + new SimpleDateFormat("mm").format(new Date(time * 1000)));
+                }
+            }
+        };
+    }
+    public static void startDailyTimer() {
+        dailyTimer.start();
+    }
+
+    public static void stopDailyTimer() {
+        dailyTimer.stop();
+    }
+
+
+
 
 
     // daily time pie chart-----------------------------------------------------
 
-    void setDailyTimePieChart(double actualStudyTime) {
+    void setDailyTimePieChart(long actualStudyTime) {
         int targetStudyTime = 0;
         double actualStudyTimeHour = 0;
         try {
@@ -284,7 +360,7 @@ public class HomeViewController implements Initializable {
             while(myRs.next()) {
                 targetStudyTime = myRs.getInt("target_hour");
             }
-            actualStudyTimeHour = actualStudyTime / 1000 / 60 / 60;
+            actualStudyTimeHour = (double)Math.round(actualStudyTime / 1000.0 / 60 / 60 * 100) / 100;
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -310,6 +386,7 @@ public class HomeViewController implements Initializable {
             ResultSet myRs = myStmt.executeQuery("select subject, sum(total_spent_time) as 'sum_time' from todo_table group by subject");
             while(myRs.next()) {
                 double sumTimeHour = myRs.getLong("sum_time") / 1000.0 / 60 / 60;
+                sumTimeHour = (double)Math.round(sumTimeHour * 100)/100;
                 String subjectName = myRs.getString("subject");
                 set.getData().addAll(new XYChart.Data(sumTimeHour, subjectName));
             }
@@ -569,7 +646,7 @@ public class HomeViewController implements Initializable {
                 String s = myRs.getString("subject");
                 String c = myRs.getString("category");
                 String t = myRs.getString("todo");
-                Long tsTime = myRs.getLong("total_spent_time");
+                long tsTime = myRs.getLong("total_spent_time");
                 boolean isDone = myRs.getBoolean("isDone");
                 boolean isVisible = myRs.getBoolean("isVisible");
                 if (!isDone && isVisible) {

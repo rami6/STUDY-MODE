@@ -103,7 +103,7 @@ public class TodoEditViewController implements Initializable {
         });
 
         JFXTreeTableColumn<TodoInfo, JFXCheckBox> doneCl1 = new JFXTreeTableColumn<>("Done");
-        doneCl1.setPrefWidth(80);
+        doneCl1.setPrefWidth(100);
         doneCl1.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, JFXCheckBox>, ObservableValue<JFXCheckBox>>() {
             @Override
             public ObservableValue<JFXCheckBox> call(TreeTableColumn.CellDataFeatures<TodoInfo, JFXCheckBox> param) {
@@ -112,7 +112,7 @@ public class TodoEditViewController implements Initializable {
         });
 
         JFXTreeTableColumn<TodoInfo, JFXButton> deleteCl1 = new JFXTreeTableColumn<>("Delete");
-        deleteCl1.setPrefWidth(80);
+        deleteCl1.setPrefWidth(100);
         deleteCl1.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton>, ObservableValue<JFXButton>>() {
             @Override
             public ObservableValue<JFXButton> call(TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton> param) {
@@ -179,7 +179,7 @@ public class TodoEditViewController implements Initializable {
                 String s = myRs.getString("subject");
                 String c = myRs.getString("category");
                 String t = myRs.getString("todo");
-                Long tsTime = myRs.getLong("total_spent_time");
+                long tsTime = myRs.getLong("total_spent_time");
                 boolean isDone = myRs.getBoolean("isDone");
                 boolean isVisible = myRs.getBoolean("isVisible");
                 if (isVisible) {

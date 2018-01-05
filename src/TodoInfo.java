@@ -43,7 +43,7 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
     String password = "";
     //---------------------------------------------------------------------
 
-    public TodoInfo(int todoId, String subject, String category, String todo, Long totalSpentTime, boolean isDone, boolean isVisible) {
+    public TodoInfo(int todoId, String subject, String category, String todo, long totalSpentTime, boolean isDone, boolean isVisible) {
         this.todoId = todoId;
         this.subject = subject;
         this.category = category;
@@ -106,6 +106,7 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
             public void handle(long now) {
                 long newTime = System.currentTimeMillis();
                 if (timestamp + 1000 <= newTime) {
+                    long originalTimestamp = timestamp;
                     long deltaT = (newTime - timestamp) / 1000;
                     time += deltaT;
                     timestamp += 1000 * deltaT;
@@ -129,18 +130,23 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
     }
 
     void toggleStartStop(Button switchButton) {
+        Date date = new Date();
+        String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
 
         if(switchButton.getText().equals("Start")) {
             timer.start();
-            Date date = new Date();
+//            if (todayDate.equals(HomeViewController.getPickedDate())) {
+                HomeViewController.startDailyTimer();
+//            }
             startTime = new java.sql.Timestamp(date.getTime());
             switchButton.setText("Stop");
         } else {
             timer.stop();
-            Date date = new Date();
+            HomeViewController.stopDailyTimer();
             stopTime = new java.sql.Timestamp(date.getTime());
             switchButton.setText("Start");
             spentTime = stopTime.getTime() - startTime.getTime();
+
 
             try {
                 Connection myConn = DriverManager.getConnection(msUrl, user, password);
@@ -157,7 +163,6 @@ class TodoInfo extends RecursiveTreeObject<TodoInfo> {
 
                 // add spent time to daily_studytime_table
                 myStmt = myConn.createStatement();
-                String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
 
                 sql = "insert ignore into daily_studytime_table (study_date, study_time)" +
                         "values ('" + todayDate + "', '0')";
