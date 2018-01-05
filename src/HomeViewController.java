@@ -221,7 +221,7 @@ public class HomeViewController implements Initializable {
                 if (hourStr.equals("0")) {
                     targetHour.setPromptText("Target study hour");
                 } else {
-                    targetHour.setText("Study " + hourStr + " hours/day!");
+                    targetHour.setText(hourStr);
                 }
             }
         } catch (Exception e) {

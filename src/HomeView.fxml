@@ -53,7 +53,7 @@
                                 </ImageView>
                                 <VBox GridPane.columnIndex="1">
                                     <children>
-                              <JFXTextField fx:id="userName" onAction="#userNameAction">
+                              <JFXTextField fx:id="userName" alignment="CENTER" onAction="#userNameAction">
                                  <font>
                                     <Font size="17.0" />
                                  </font>
@@ -70,13 +70,29 @@
                         </GridPane>
                   <Pane prefHeight="88.0" prefWidth="200.0">
                      <children>
-                        <JFXTextField fx:id="targetHour" layoutX="25.0" layoutY="9.0" onAction="#targetHourAction" />
+                        <JFXTextField fx:id="targetHour" alignment="BOTTOM_CENTER" layoutX="66.0" layoutY="12.0" onAction="#targetHourAction" prefHeight="27.0" prefWidth="45.0">
+                           <font>
+                              <Font size="22.0" />
+                           </font></JFXTextField>
+                        <Label layoutX="12.0" layoutY="27.0" prefHeight="20.0" prefWidth="51.0" text="Study">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="122.0" layoutY="27.0" prefHeight="20.0" prefWidth="74.0" text="hrs/day!">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
                      </children>
                   </Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="recordBtn" layoutX="132.0" layoutY="27.0" mnemonicParsing="false" onAction="#startStopRecord" prefHeight="26.0" prefWidth="26.0" style="-fx-background-radius: 13;" text="●" textFill="#c30202" />
-                        <Label layoutX="32.0" layoutY="24.0" prefHeight="32.0" prefWidth="90.0" text="Screen Video" />
+                        <Button fx:id="recordBtn" layoutX="137.0" layoutY="27.0" mnemonicParsing="false" onAction="#startStopRecord" prefHeight="28.0" prefWidth="28.0" style="-fx-background-radius: 14;" text="●" textFill="#c30202" />
+                        <Label layoutX="27.0" layoutY="24.0" prefHeight="32.0" prefWidth="104.0" text="Screen Video">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
                      </children>
                   </Pane>
                         <VBox>
@@ -153,7 +169,11 @@
                               <Font size="31.0" />
                            </font>
                         </JFXTextField>
-                        <JFXTextField editable="false" layoutX="33.0" layoutY="55.0" prefHeight="27.0" prefWidth="117.0" text="Total Study hours" />
+                        <Label layoutX="33.0" layoutY="65.0" text="Study hours total">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
                             </children>
                         </Pane>
                         <Pane prefHeight="481.0" prefWidth="920.0">
