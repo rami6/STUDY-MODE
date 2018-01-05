@@ -591,6 +591,15 @@ public class HomeViewController implements Initializable {
             recordBtn.setText("Stop");
             // let QuickTime start recording
 
+            try {
+                File file = new File("src/resources/ScreenRecord.scpt");
+                String filePath = file.getAbsolutePath();
+                String command = "osascript " + filePath;
+                Runtime.getRuntime().exec(command);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+
         } else {
             recordBtn.setText("Record");
             // let QuickTime stop recording
