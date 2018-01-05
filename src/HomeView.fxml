@@ -6,95 +6,183 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import com.jfoenix.controls.JFXTreeView?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane prefHeight="793.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeViewController">
-  <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1500.0" prefWidth="1181.0">
-         <children>
-             <!--side area_____________________________________________________________________________________________________________________________ -->
-             <!--user name-->
-             <JFXTextField fx:id="userName" layoutX="21.0" layoutY="20.0" onAction="#userNameAction" />
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #eaedf1;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeViewController">
+    <content>
+        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #eaedf1;">
+            <left>
+                <FlowPane prefHeight="768.0" prefWidth="280.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
+                    <children>
+                        <GridPane prefHeight="100.0" prefWidth="250.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="118.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="162.0" minWidth="10.0" prefWidth="162.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                    <GridPane.margin>
+                                        <Insets left="10.0" right="10.0" />
+                                    </GridPane.margin>
+                                    <image>
+                                        <!--<Image url="@../image/icon.png" />-->
+                                    </image>
+                                </ImageView>
+                                <VBox GridPane.columnIndex="1">
+                                    <children>
+                                        <Label text="Handle Name" textFill="#323a45">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Label text="CICCC" textFill="#323a45">
+                                            <font>
+                                                <Font size="12.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <GridPane.margin>
+                                        <Insets top="30.0" />
+                                    </GridPane.margin>
+                                </VBox>
+                            </children>
+                            <FlowPane.margin>
+                                <Insets bottom="50.0" />
+                            </FlowPane.margin>
+                        </GridPane>
+                        <VBox>
+                            <children>
+                                <Label text="SETTING" textFill="#323a45">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets bottom="16.0" />
+                                    </VBox.margin>
+                                </Label>
+                                <VBox>
+                                    <children>
+                                        <Label text="View" textFill="#323a45">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                        </Label>
+                                        <JFXToggleButton prefHeight="50.0" prefWidth="105.0" size="8.0" text="ToDo" textFill="#323a45">
+                                            <font>
+                                                <Font size="15.0" />
+                                            </font>
+                                        </JFXToggleButton>
+                                        <JFXToggleButton layoutX="10.0" layoutY="37.0" prefHeight="50.0" prefWidth="105.0" size="8.0" text="Note" textFill="#323a45">
+                                            <font>
+                                                <Font size="15.0" />
+                                            </font>
+                                        </JFXToggleButton>
+                                        <JFXToggleButton layoutX="10.0" layoutY="191.0" prefHeight="50.0" prefWidth="105.0" size="8.0" text="Chart" textFill="#323a45">
+                                            <font>
+                                                <Font size="15.0" />
+                                            </font>
+                                        </JFXToggleButton>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </children>
+                    <padding>
+                        <Insets left="15.0" right="15.0" />
+                    </padding>
+                </FlowPane>
+            </left>
 
-             <!--setting-->
-             <JFXTextField fx:id="targetHour" layoutX="21.0" layoutY="74.0" onAction="#targetHourAction" />
-             <JFXTextField layoutX="21.0" layoutY="314.0" text="SETTING" />
+            <center>
+                <VBox prefHeight="768.0" prefWidth="1366.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox alignment="CENTER" prefHeight="112.0" prefWidth="1366.0" style="-fx-background-color: #323a45 #323a45;">
+                            <children>
+                                <Label text="&lt;&gt;STUDY MODE&lt;/&gt;" textFill="#4ad177">
+                                    <font>
+                                        <Font size="60.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="120.0" prefWidth="920.0">
+                            <children>
+                                <TextField fx:id="search" prefHeight="45.0" prefWidth="400.0" onAction="#searchWeb" promptText="Let's Googling!" />
+                            </children>
+                        </HBox>
+                        <Pane prefHeight="485.0" prefWidth="955.0">
+                            <children>
+                                <JFXDatePicker fx:id="datePicker" layoutX="95.0" layoutY="16.0" prefHeight="29.0" prefWidth="250.0" onAction="#datePickAction" />
+                                <PieChart fx:id="timePieChart" layoutX="25.0" layoutY="74.0" prefHeight="307.0" prefWidth="384.0" />
+                                <JFXComboBox fx:id="subject" focusColor="#14b9d6" layoutX="476.0" layoutY="16.0" onAction="#subjectAction" promptText="Subject" />
+                                <JFXComboBox fx:id="category" focusColor="#14b9d6" layoutX="604.0" layoutY="16.0" onAction="#categoryAction" promptText="Category" />
+                                <JFXTextField fx:id="todo" focusColor="#14b9d6" layoutX="735.0" layoutY="16.0" onAction="#addNewTodo" promptText="To Do" />
+                                <Button fx:id="ok" layoutX="908.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="72.0" style="-fx-background-color: #14b9d6;" onAction="#addNewTodo" text="OK!" textFill="WHITE" />
+                                <JFXTreeTableView fx:id="todoListTable" layoutX="476.0" layoutY="78.0" prefHeight="300.0" prefWidth="504.0" />
+                            </children>
+                        </Pane>
+                        <Pane prefHeight="481.0" prefWidth="920.0">
+                            <children>
 
-             <!--main area_____________________________________________________________________________________________________________________________ -->
-             <!--date picker-->
-             <JFXDatePicker fx:id="datePicker" layoutX="254.0" layoutY="112.0" onAction="#datePickAction" />
 
-             <!--daily total study time-->
-             <JFXTextField alignment="CENTER" editable="false" layoutX="254.0" layoutY="153.0" prefHeight="27.0" prefWidth="53.0" text="Total" />
-             <JFXTextField fx:id="dailyTotalTime" alignment="CENTER" layoutX="254.0" layoutY="188.0" prefHeight="68.0" prefWidth="208.0">
-                 <font>
-                     <Font size="31.0" />
-                 </font>
-             </JFXTextField>
+                                <JFXComboBox fx:id="subjectSelector1" layoutX="20.0" layoutY="20.0" onAction="#selector1Action" prefHeight="27.0" prefWidth="287.0" />
+                                <JFXComboBox fx:id="subjectSelector2" layoutX="500.0" layoutY="20.0" onAction="#selector2Action" prefHeight="27.0" prefWidth="287.0" />
 
-             <!--target-actual study time pie chart-->
-             <PieChart fx:id="timePieChart" layoutX="243.0" layoutY="267.0" prefHeight="226.0" prefWidth="236.0" />
+                                <BarChart fx:id="timeBarChart1" layoutX="20.0" layoutY="50.0" title="Barchart">
+                                    <xAxis>
+                                        <NumberAxis side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <CategoryAxis side="LEFT" />
+                                    </yAxis>
+                                </BarChart>
+                                <BarChart fx:id="timeBarChart2" layoutX="500.0" layoutY="50.0" title="Barchart">
+                                    <xAxis>
+                                        <NumberAxis side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <CategoryAxis side="LEFT" />
+                                    </yAxis>
+                                </BarChart>
+                            </children>
+                        </Pane>
+                        <Pane prefHeight="540.0" prefWidth="920.0">
+                            <children>
+                                <JFXListView fx:id="noteList" layoutX="54.0" layoutY="54.0" prefHeight="350.0" prefWidth="300.0" />
+                                <JFXTextArea fx:id="noteEditArea" layoutX="388.0" layoutY="75.0" prefHeight="322.0" prefWidth="393.0" promptText="Enter note" />
+                                <JFXButton fx:id="noteSaveBtn" layoutX="306.0" layoutY="427.0" onAction="#saveNote" text="Save" />
+                                <JFXButton fx:id="newNoteBtn" layoutX="736.0" layoutY="427.0" onAction="#createNewNote" text="New" />
+                            </children>
+                        </Pane>
+                    </children>
+                </VBox>
 
-             <!--search window-->
-            <TextField fx:id="search" layoutX="391.0" layoutY="47.0" onAction="#searchWeb" prefHeight="27.0" prefWidth="302.0" promptText="Let's Googling!" />
-
-            <!--task input field-->
-            <Button fx:id="ok" layoutX="1102.0" layoutY="113.0" mnemonicParsing="false" onAction="#addNewTodo" text="OK!" />
-            <JFXTextField fx:id="todo" layoutX="796.0" layoutY="113.0" onAction="#addNewTodo" prefHeight="27.0" prefWidth="295.0" promptText="To Do" />
-
-            <!--todolist with timer-->
-            <JFXTreeTableView fx:id="todoListTable" layoutX="495.0" layoutY="153.0" prefHeight="321.0" prefWidth="656.0" />
-            <JFXComboBox fx:id="subject" layoutX="495.0" layoutY="113.0" onAction="#subjectAction" prefHeight="27.0" prefWidth="136.0" promptText="Subject" />
-            <JFXComboBox fx:id="category" layoutX="647.0" layoutY="113.0" onAction="#categoryAction" prefHeight="27.0" prefWidth="132.0" promptText="Category" />
-
-             <JFXButton fx:id="editTodoBtn" layoutX="1093.0" layoutY="480.0" onAction="#openEditWindow" text="Edit" />
-
-            <!--study time bar chart -->
-             <JFXComboBox fx:id="subjectSelector1" layoutX="336.0" layoutY="509.0" onAction="#selector1Action" prefHeight="27.0" prefWidth="287.0" />
-             <JFXComboBox fx:id="subjectSelector2" layoutX="779.0" layoutY="509.0" onAction="#selector2Action" prefHeight="27.0" prefWidth="287.0" />
-
-             <BarChart fx:id="timeBarChart1" layoutX="254.0" layoutY="536.0" prefHeight="400.0" prefWidth="417.0">
-                 <xAxis>
-                     <NumberAxis side="BOTTOM" />
-                 </xAxis>
-                 <yAxis>
-                     <CategoryAxis label="Subject" side="LEFT" />
-                 </yAxis>
-             </BarChart>
-            <BarChart fx:id="timeBarChart2" layoutX="693.0" layoutY="536.0" prefHeight="400.0" prefWidth="417.0">
-                <xAxis>
-                    <NumberAxis side="BOTTOM" />
-                </xAxis>
-                <yAxis>
-                    <CategoryAxis label="Subject" side="LEFT" />
-                </yAxis>
-            </BarChart>
-
-             <!--note-->
-             <Pane layoutX="280.0" layoutY="1000" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
-                 <children>
-                     <JFXListView fx:id="noteList" layoutY="69.0" prefHeight="286.0" prefWidth="216.0" />
-                     <JFXTextArea fx:id="noteEditArea" layoutX="229.0" layoutY="69.0" prefHeight="325.0" prefWidth="369.0" promptText="Enter note" />
-                     <JFXButton fx:id="noteSaveBtn" layoutX="515.0" layoutY="407.0" onAction="#saveNote" text="Save" />
-                     <JFXButton fx:id="newNoteBtn" layoutX="170.0" layoutY="367.0" onAction="#createNewNote" text="New" />
-                 </children>
-             </Pane>
-
-            <!--record video-->
-            <JFXButton fx:id="recordBtn" layoutX="993.0" layoutY="20.0" onAction="#startStopRecord" prefHeight="27.0" prefWidth="81.0" text="Record" />
-            <JFXButton fx:id="watchBtn" layoutX="1085.0" layoutY="20.0" onAction="#openVideoFolder" prefHeight="27.0" prefWidth="81.0" text="Watch" />
-
-         </children>
-      </AnchorPane>
-  </content>
+            </center>
+        </BorderPane>
+    </content>
 </ScrollPane>
