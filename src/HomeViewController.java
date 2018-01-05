@@ -26,6 +26,7 @@
         import javafx.scene.control.*;
         import javafx.stage.Stage;
         import javafx.util.Callback;
+        import jdk.jfr.Category;
 
         import java.io.File;
         import java.io.IOException;
@@ -59,9 +60,6 @@ public class HomeViewController implements Initializable {
     private TextField todo;
 
     @FXML
-    private ObservableList<String> subList = FXCollections.observableArrayList("aaa");
-
-    @FXML
     private JFXComboBox<String> subject;
 
     @FXML
@@ -73,35 +71,27 @@ public class HomeViewController implements Initializable {
     @FXML
     private JFXTextField newSubject;
 
-    @FXML
-    private JFXButton addSbjBtn;
-
     // todolist with timer ----------------------------------------------
     @FXML
     private JFXTreeTableView<TodoInfo> todoListTable;
     final ObservableList<TodoInfo> todoInfoList = FXCollections.observableArrayList();
 
     @FXML
-    private JFXButton doneBtn;
+    private Button editBtn;
+
+    @FXML
+    private Button refreshTableBtn;
 
     // spent time chart ----------------------------------------------
     @FXML
-    private BarChart<?, ?> timeBarChart1;
+    private BarChart<Number, String> timeBarChart1;
 
     @FXML
-    private BarChart<?, ?> timeBarChart2;
+    private BarChart<Number, String> timeBarChart2;
 
     @FXML
-    private JFXComboBox<String> subjectSelector1;
+    private JFXComboBox<String> subjectSelector;
 
-    @FXML
-    private JFXComboBox<String> subjectSelector2;
-
-    @FXML
-    private CategoryAxis x;
-
-    @FXML
-    private NumberAxis y;
 
     @FXML
     PieChart timePieChart;
@@ -127,10 +117,13 @@ public class HomeViewController implements Initializable {
     private JFXTextArea noteEditArea;
 
     @FXML
-    private JFXButton noteSaveBtn;
+    private Button noteSaveBtn;
 
     @FXML
-    private JFXButton newNoteBtn;
+    private Button newNoteBtn;
+
+    @FXML
+    private Button deleteBtn;
 
     // record screen video ----------------------------------------------
     @FXML
@@ -143,8 +136,6 @@ public class HomeViewController implements Initializable {
     String msUrl = "jdbc:mysql://localhost:3306/studymode_db";
     String user = "root";
     String password = "";
-
-
 
     // [Methods]
 
@@ -161,8 +152,9 @@ public class HomeViewController implements Initializable {
 
         showDailyStudyTime();
 
-        setSubjectOption(subjectSelector1);
-        setSubjectOption(subjectSelector2);
+        setTimeBarChartBySubject();
+        setSubjectOption(subjectSelector);
+        test();
 
     }
 
@@ -308,10 +300,31 @@ public class HomeViewController implements Initializable {
 
     // time bar chart -----------------------------------------------------
 
-    void setTimeBarChart(BarChart barChart, JFXComboBox<String> subjectSelector) {
+    void setTimeBarChartBySubject() {
+        XYChart.Series set = new XYChart.Series<>();
+        timeBarChart1.setLegendVisible(false);
+
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select subject, sum(total_spent_time) as 'sum_time' from todo_table group by subject");
+            while(myRs.next()) {
+                double sumTimeHour = myRs.getLong("sum_time") / 1000.0 / 60 / 60;
+                String subjectName = myRs.getString("subject");
+                set.getData().addAll(new XYChart.Data(sumTimeHour, subjectName));
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        timeBarChart1.getData().addAll(set);
+    }
+
+    @FXML
+    void selectorAction(ActionEvent event) {
+        timeBarChart2.getData().clear();
 
         XYChart.Series set = new XYChart.Series<>();
-        barChart.setLegendVisible(false);
+        timeBarChart2.setLegendVisible(false);
         String selectedSubject = subjectSelector.getValue();
 
         try {
@@ -320,23 +333,41 @@ public class HomeViewController implements Initializable {
             ResultSet myRs = myStmt.executeQuery("select category, sum(total_spent_time) as 'sum_time' from todo_table where subject = '" + selectedSubject + "' group by category");
             while(myRs.next()) {
                 double sumTimeHour = myRs.getLong("sum_time") / 1000.0 / 60 / 60;
-                String legend = myRs.getString("category");
-                set.getData().add(new XYChart.Data(sumTimeHour, legend));
+                sumTimeHour = (double)Math.round(sumTimeHour * 100)/100;
+                String categoryName = myRs.getString("category");
+                set.getData().add(new XYChart.Data(sumTimeHour, categoryName));
+                System.out.println(new XYChart.Data(sumTimeHour, categoryName));
             }
         }catch (Exception e) {
             e.printStackTrace();
         }
-        barChart.getData().addAll(set);
+        timeBarChart2.getData().addAll(set);
     }
 
-    @FXML
-    void selector1Action(ActionEvent event) {
-        setTimeBarChart(timeBarChart1, subjectSelector1);
-    }
+    void test() {
+        timeBarChart2.getData().clear();
 
-    @FXML
-    void selector2Action(ActionEvent event) {
-        setTimeBarChart(timeBarChart2, subjectSelector2);
+        XYChart.Series set = new XYChart.Series<>();
+        timeBarChart2.setLegendVisible(false);
+        String selectedSubject = subjectSelector.getValue();
+        
+        subjectSelector.setValue("Programming");
+
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select category, sum(total_spent_time) as 'sum_time' from todo_table where subject = 'Programming' group by category");
+            while(myRs.next()) {
+                double sumTimeHour = myRs.getLong("sum_time") / 1000.0 / 60 / 60;
+                sumTimeHour = (double)Math.round(sumTimeHour * 100)/100;
+                String categoryName = myRs.getString("category");
+                set.getData().add(new XYChart.Data(sumTimeHour, categoryName));
+                System.out.println(new XYChart.Data(sumTimeHour, categoryName));
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        timeBarChart2.getData().addAll(set);
     }
 
     // todothing input field -------------------------------------------------
@@ -568,7 +599,11 @@ public class HomeViewController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    @FXML
+    void refreshTable(ActionEvent event) {
+        setTableView();
     }
 
     // note -------------------------------------------------------------
