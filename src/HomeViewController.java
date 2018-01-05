@@ -134,7 +134,7 @@ public class HomeViewController implements Initializable {
 
     // record screen video ----------------------------------------------
     @FXML
-    private JFXButton recordBtn;
+    private Button recordBtn;
 
     @FXML
     private JFXButton watchBtn;
@@ -587,8 +587,8 @@ public class HomeViewController implements Initializable {
 
     @FXML
     void startStopRecord(ActionEvent event) {
-        if(recordBtn.getText().equals("Record")) {
-            recordBtn.setText("Stop");
+        if(recordBtn.getText().equals("●")) {
+            recordBtn.setText("■");
             // let QuickTime start recording
 
             try {
@@ -601,7 +601,7 @@ public class HomeViewController implements Initializable {
             }
 
         } else {
-            recordBtn.setText("Record");
+            recordBtn.setText("●");
             // let QuickTime stop recording
 
         }

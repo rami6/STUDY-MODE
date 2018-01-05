@@ -7,7 +7,7 @@
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleButton?>
-<?import com.jfoenix.controls.JFXTreeView?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
@@ -17,7 +17,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -29,14 +28,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import com.jfoenix.controls.JFXTreeTableView?>
-<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #eaedf1;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeViewController">
+<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="2000.0" prefWidth="1200.0" style="-fx-background-color: #eaedf1;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeViewController">
     <content>
-        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #eaedf1;">
+        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0" prefWidth="1200.0" style="-fx-background-color: #eaedf1;">
             <left>
-                <FlowPane prefHeight="768.0" prefWidth="280.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
+                <FlowPane prefHeight="768.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
                     <children>
-                        <GridPane prefHeight="100.0" prefWidth="250.0">
+                        <GridPane prefHeight="100.0" prefWidth="197.0">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="118.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="162.0" minWidth="10.0" prefWidth="162.0" />
@@ -45,26 +43,21 @@
                                 <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <GridPane.margin>
-                                        <Insets left="10.0" right="10.0" />
+                                        <Insets left="0.0" right="10.0" />
                                     </GridPane.margin>
                                     <image>
-                                        <!--<Image url="@../image/icon.png" />-->
+                                        <!--<Image url="resources/icon.png" />-->
                                     </image>
                                 </ImageView>
                                 <VBox GridPane.columnIndex="1">
                                     <children>
-                                        <Label text="Handle Name" textFill="#323a45">
-                                            <font>
-                                                <Font size="16.0" />
-                                            </font>
-                                        </Label>
-                                        <Label text="CICCC" textFill="#323a45">
-                                            <font>
-                                                <Font size="12.0" />
-                                            </font>
-                                        </Label>
+                              <JFXTextField fx:id="userName" onAction="#userNameAction">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </JFXTextField>
                                     </children>
                                     <GridPane.margin>
                                         <Insets top="30.0" />
@@ -75,6 +68,17 @@
                                 <Insets bottom="50.0" />
                             </FlowPane.margin>
                         </GridPane>
+                  <Pane prefHeight="88.0" prefWidth="200.0">
+                     <children>
+                        <JFXTextField fx:id="targetHour" layoutX="25.0" layoutY="9.0" onAction="#targetHourAction" />
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="recordBtn" layoutX="132.0" layoutY="27.0" mnemonicParsing="false" onAction="#startStopRecord" prefHeight="26.0" prefWidth="26.0" style="-fx-background-radius: 13;" text="●" textFill="#c30202" />
+                        <Label layoutX="32.0" layoutY="24.0" prefHeight="32.0" prefWidth="90.0" text="Screen Video" />
+                     </children>
+                  </Pane>
                         <VBox>
                             <children>
                                 <Label text="SETTING" textFill="#323a45">
@@ -132,28 +136,34 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="120.0" prefWidth="920.0">
                             <children>
-                                <TextField fx:id="search" prefHeight="45.0" prefWidth="400.0" onAction="#searchWeb" promptText="Let's Googling!" />
+                                <TextField fx:id="search" onAction="#searchWeb" prefHeight="45.0" prefWidth="400.0" promptText="Let's Googling!" />
                             </children>
                         </HBox>
                         <Pane prefHeight="485.0" prefWidth="955.0">
                             <children>
-                                <JFXDatePicker fx:id="datePicker" layoutX="95.0" layoutY="16.0" prefHeight="29.0" prefWidth="250.0" onAction="#datePickAction" />
-                                <PieChart fx:id="timePieChart" layoutX="25.0" layoutY="74.0" prefHeight="307.0" prefWidth="384.0" />
-                                <JFXComboBox fx:id="subject" focusColor="#14b9d6" layoutX="476.0" layoutY="16.0" onAction="#subjectAction" promptText="Subject" />
-                                <JFXComboBox fx:id="category" focusColor="#14b9d6" layoutX="604.0" layoutY="16.0" onAction="#categoryAction" promptText="Category" />
-                                <JFXTextField fx:id="todo" focusColor="#14b9d6" layoutX="735.0" layoutY="16.0" onAction="#addNewTodo" promptText="To Do" />
-                                <Button fx:id="ok" layoutX="908.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="72.0" style="-fx-background-color: #14b9d6;" onAction="#addNewTodo" text="OK!" textFill="WHITE" />
-                                <JFXTreeTableView fx:id="todoListTable" layoutX="476.0" layoutY="78.0" prefHeight="300.0" prefWidth="504.0" />
+                                <JFXDatePicker fx:id="datePicker" layoutX="33.0" layoutY="16.0" onAction="#datePickAction" prefHeight="29.0" prefWidth="180.0" />
+                                <PieChart fx:id="timePieChart" layoutX="14.0" layoutY="157.0" prefHeight="226.0" prefWidth="231.0" />
+                                <JFXComboBox fx:id="subject" focusColor="#14b9d6" layoutX="260.0" layoutY="16.0" onAction="#subjectAction" prefHeight="27.0" prefWidth="117.0" promptText="Subject" />
+                                <JFXComboBox fx:id="category" focusColor="#14b9d6" layoutX="388.0" layoutY="16.0" onAction="#categoryAction" prefHeight="27.0" prefWidth="117.0" promptText="Category" />
+                                <JFXTextField fx:id="todo" focusColor="#14b9d6" layoutX="518.0" layoutY="16.0" onAction="#addNewTodo" prefHeight="27.0" prefWidth="326.0" promptText="To Do" />
+                                <Button fx:id="ok" layoutX="856.0" layoutY="14.0" mnemonicParsing="false" onAction="#addNewTodo" prefHeight="32.0" prefWidth="72.0" style="-fx-background-color: #14b9d6;" text="OK!" textFill="WHITE" />
+                                <JFXTreeTableView fx:id="todoListTable" layoutX="260.0" layoutY="58.0" prefHeight="327.0" prefWidth="672.0" />
+                        <JFXTextField fx:id="dailyTotalTime" alignment="CENTER" layoutX="33.0" layoutY="88.0" prefHeight="46.0" prefWidth="177.0">
+                           <font>
+                              <Font size="31.0" />
+                           </font>
+                        </JFXTextField>
+                        <JFXTextField editable="false" layoutX="33.0" layoutY="55.0" prefHeight="27.0" prefWidth="117.0" text="Total Study hours" />
                             </children>
                         </Pane>
                         <Pane prefHeight="481.0" prefWidth="920.0">
                             <children>
 
 
-                                <JFXComboBox fx:id="subjectSelector1" layoutX="20.0" layoutY="20.0" onAction="#selector1Action" prefHeight="27.0" prefWidth="287.0" />
-                                <JFXComboBox fx:id="subjectSelector2" layoutX="500.0" layoutY="20.0" onAction="#selector2Action" prefHeight="27.0" prefWidth="287.0" />
+                                <JFXComboBox fx:id="subjectSelector1" layoutX="106.0" layoutY="20.0" onAction="#selector1Action" prefHeight="27.0" prefWidth="287.0" />
+                                <JFXComboBox fx:id="subjectSelector2" layoutX="570.0" layoutY="20.0" onAction="#selector2Action" prefHeight="27.0" prefWidth="287.0" />
 
-                                <BarChart fx:id="timeBarChart1" layoutX="20.0" layoutY="50.0" title="Barchart">
+                                <BarChart fx:id="timeBarChart1" layoutX="26.0" layoutY="50.0" prefHeight="420.0" prefWidth="447.0">
                                     <xAxis>
                                         <NumberAxis side="BOTTOM" />
                                     </xAxis>
@@ -161,7 +171,7 @@
                                         <CategoryAxis side="LEFT" />
                                     </yAxis>
                                 </BarChart>
-                                <BarChart fx:id="timeBarChart2" layoutX="500.0" layoutY="50.0" title="Barchart">
+                                <BarChart fx:id="timeBarChart2" layoutX="490.0" layoutY="50.0" prefHeight="420.0" prefWidth="447.0">
                                     <xAxis>
                                         <NumberAxis side="BOTTOM" />
                                     </xAxis>
@@ -175,8 +185,9 @@
                             <children>
                                 <JFXListView fx:id="noteList" layoutX="54.0" layoutY="54.0" prefHeight="350.0" prefWidth="300.0" />
                                 <JFXTextArea fx:id="noteEditArea" layoutX="388.0" layoutY="75.0" prefHeight="322.0" prefWidth="393.0" promptText="Enter note" />
-                                <JFXButton fx:id="noteSaveBtn" layoutX="306.0" layoutY="427.0" onAction="#saveNote" text="Save" />
-                                <JFXButton fx:id="newNoteBtn" layoutX="736.0" layoutY="427.0" onAction="#createNewNote" text="New" />
+                                <JFXButton fx:id="noteSaveBtn" layoutX="733.0" layoutY="414.0" onAction="#saveNote" text="Save" />
+                                <JFXButton fx:id="newNoteBtn" layoutX="294.0" layoutY="414.0" onAction="#createNewNote" prefHeight="27.0" prefWidth="54.0" text="New" />
+                        <JFXButton fx:id="newNoteBtn1" layoutX="221.0" layoutY="414.0" onAction="#createNewNote" text="Delete" />
                             </children>
                         </Pane>
                     </children>
