@@ -79,7 +79,6 @@ public class HomeViewController implements Initializable {
     // todolist with timer ----------------------------------------------
     @FXML
     private JFXTreeTableView<TodoInfo> todoListTable;
-    final ObservableList<TodoInfo> todoInfoList = FXCollections.observableArrayList();
 
     @FXML
     private Button editBtn;
@@ -154,7 +153,7 @@ public class HomeViewController implements Initializable {
         showUserName();
         showTargetHour();
 
-        setSubjectOption(subject);
+        setInputSubjectOption();
         setTableView();
 
         setDefaultDate();
@@ -162,7 +161,7 @@ public class HomeViewController implements Initializable {
         showDailyStudyTime();
 
         setTimeBarChartBySubject();
-        setSubjectOption(subjectSelector);
+        setChartSubjectOption();
         setInitialBarchart2();
 
         setNoteListView();
@@ -399,6 +398,20 @@ public class HomeViewController implements Initializable {
         timeBarChart1.getData().addAll(set);
     }
 
+    void setChartSubjectOption() {
+
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select * from subject_table");
+            while(myRs.next()) {
+                subjectSelector.getItems().add(myRs.getString("subject_name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void selectorAction(ActionEvent event) {
         timeBarChart2.getData().clear();
@@ -452,13 +465,14 @@ public class HomeViewController implements Initializable {
     // todothing input field -------------------------------------------------
 
 
-    void setSubjectOption(JFXComboBox subjectCombo) {
+    void setInputSubjectOption() {
+        subject.getItems().clear();
         try {
             Connection myConn = DriverManager.getConnection(msUrl, user, password);
             Statement myStmt = myConn.createStatement();
             ResultSet myRs = myStmt.executeQuery("select * from subject_table");
             while(myRs.next()) {
-                subjectCombo.getItems().add(myRs.getString("subject_name"));
+                subject.getItems().add(myRs.getString("subject_name"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -551,7 +565,7 @@ public class HomeViewController implements Initializable {
     }
 
     void setNewSubject(String str) {
-        setSubjectOption(subject);
+        setInputSubjectOption();
         subject.setValue(str);
     }
 
@@ -591,6 +605,8 @@ public class HomeViewController implements Initializable {
 
     // todolist with timer ----------------------------------------------
     void setTableView() {
+        ObservableList<TodoInfo> todoInfoList = FXCollections.observableArrayList();
+
         JFXTreeTableColumn<TodoInfo, String> subjectCl = new JFXTreeTableColumn<>("Subject");
         subjectCl.setPrefWidth(100);
         subjectCl.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, String>, ObservableValue<String>>() {

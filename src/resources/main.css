@@ -48,3 +48,11 @@ Button:hover {
     -fx-table-cell-border-color: -fx-tree-table-color;
     -fx-text-fill: BLACK;
 }
+
+.default-color0.chart-bar {
+-fx-bar-fill: #1fbba6;
+}
+
+.default-color1.chart-bar {
+-fx-bar-fill: #efb454;
+}
