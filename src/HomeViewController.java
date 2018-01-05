@@ -603,6 +603,14 @@ public class HomeViewController implements Initializable {
         } else {
             recordBtn.setText("●");
             // let QuickTime stop recording
+            try {
+                File file = new File("src/resources/Stoprecording.scpt");
+                String filePath = file.getAbsolutePath();
+                String command = "osascript " + filePath;
+                Runtime.getRuntime().exec(command);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }
