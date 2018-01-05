@@ -1,0 +1,50 @@
+/*******************************************************************************
+*                                                                              *
+* Common                                                                       *
+*                                                                              *
+*******************************************************************************/
+Button:hover {
+    -fx-cursor: hand;
+}
+.root {
+    -fx-text-fill: #323a45;
+}
+/*******************************************************************************
+*                                                                              *
+* JFX List View                                                                *
+*                                                                              *
+*******************************************************************************/
+.jfx-list-cell {
+    -fx-background-insets: 0.0;
+    -fx-text-fill: BLACK;
+}
+.jfx-list-cell:filled:hover,
+.jfx-list-cell:selected .label {
+    -fx-background-color: rgba(38, 177, 166, 0.2);
+    -fx-text-fill: black;
+        -fx-cursor: hand;
+}
+.jfx-list-cell:selected {
+    -fx-background-color: rgba(38, 177, 166, 0.2);
+    -fx-text-fill: black;
+}
+
+/*******************************************************************************
+*                                                                              *
+* Tree Table View                                                              *
+*                                                                              *
+*******************************************************************************/
+
+.tree-table-view,
+.tree-table-view:hover,
+.tree-table-row-cell:hover {
+    -fx-tree-table-color: rgba(38, 177, 166, 0.2);
+    -fx-tree-table-rippler-color: rgba(38, 177, 166, 0.4);
+        -fx-cursor: hand;
+}
+
+.tree-table-view:focused .tree-table-row-cell:selected {
+    -fx-background-color: -fx-tree-table-color;
+    -fx-table-cell-border-color: -fx-tree-table-color;
+    -fx-text-fill: BLACK;
+}

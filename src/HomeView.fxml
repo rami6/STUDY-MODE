@@ -16,6 +16,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -27,7 +28,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="2000.0" prefWidth="1200.0" style="-fx-background-color: #eaedf1;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeViewController">
+<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="2000.0" prefWidth="1200.0" style="-fx-background-color: #eaedf1;" stylesheets="@resources/main.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomeViewController">
     <content>
         <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0" prefWidth="1200.0" style="-fx-background-color: #eaedf1;">
             <left>
@@ -47,7 +48,7 @@
                                         <Insets left="0.0" right="10.0" />
                                     </GridPane.margin>
                                     <image>
-                                        <!--<Image url="resources/icon.png" />-->
+                                        <Image url="@resources/logo.jpg" />
                                     </image>
                                 </ImageView>
                                 <VBox GridPane.columnIndex="1">
@@ -94,37 +95,52 @@
                            </font></Label>
                      </children>
                   </Pane>
-                        <VBox>
+                        <VBox prefHeight="218.0" prefWidth="178.0">
                             <children>
-                                <Label text="SETTING" textFill="#323a45">
-                                    <font>
-                                        <Font size="24.0" />
-                                    </font>
-                                    <VBox.margin>
-                                        <Insets bottom="16.0" />
-                                    </VBox.margin>
-                                </Label>
+                        <HBox>
+                           <children>
+                              <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@resources/setting.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets right="5.0" top="4.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                                      <Label prefWidth="103.0" text="SETTING" textFill="#323a45">
+                                          <font>
+                                              <Font size="24.0" />
+                                          </font>
+                                      </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="15.0" />
+                           </VBox.margin>
+                        </HBox>
                                 <VBox>
                                     <children>
-                                        <Label text="View" textFill="#323a45">
+                                        <Label text="Filter" textFill="#323a45">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
                                         </Label>
-                                        <JFXToggleButton prefHeight="50.0" prefWidth="105.0" size="8.0" text="ToDo" textFill="#323a45">
+                                        <JFXToggleButton prefHeight="50.0" prefWidth="127.0" size="8.0" text="Youtube" textFill="#323a45">
                                             <font>
                                                 <Font size="15.0" />
                                             </font>
                                         </JFXToggleButton>
-                                        <JFXToggleButton layoutX="10.0" layoutY="37.0" prefHeight="50.0" prefWidth="105.0" size="8.0" text="Note" textFill="#323a45">
+                                        <JFXToggleButton layoutX="10.0" layoutY="37.0" prefHeight="50.0" prefWidth="136.0" size="8.0" text="Facebook" textFill="#323a45">
                                             <font>
                                                 <Font size="15.0" />
                                             </font>
                                         </JFXToggleButton>
-                                        <JFXToggleButton layoutX="10.0" layoutY="191.0" prefHeight="50.0" prefWidth="105.0" size="8.0" text="Chart" textFill="#323a45">
+                                        <JFXToggleButton layoutX="10.0" layoutY="191.0" prefHeight="50.0" prefWidth="127.0" size="8.0" text="Twitter" textFill="#323a45">
                                             <font>
                                                 <Font size="15.0" />
                                             </font>
+                                 <VBox.margin>
+                                    <Insets left="-4.0" />
+                                 </VBox.margin>
                                         </JFXToggleButton>
                                     </children>
                                 </VBox>
@@ -207,7 +223,10 @@
                         <Pane prefHeight="540.0" prefWidth="920.0">
                             <children>
                                 <JFXListView fx:id="noteList" layoutX="54.0" layoutY="97.0" onEditCommit="#updateTitle" onMouseClicked="#showNoteContent" prefHeight="350.0" prefWidth="300.0" />
-                                <JFXTextArea fx:id="noteEditArea" layoutX="388.0" layoutY="97.0" prefHeight="343.0" prefWidth="532.0" promptText="Enter Note" style="-fx-background-color: WHITE;" />
+                                <JFXTextArea fx:id="noteEditArea" layoutX="388.0" layoutY="97.0" prefHeight="343.0" prefWidth="532.0" promptText="Enter Note" style="-fx-background-color: WHITE;">
+                           <padding>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </padding></JFXTextArea>
                                 <Button fx:id="noteSaveBtn" layoutX="872.0" layoutY="457.0" mnemonicParsing="false" onAction="#saveNote" style="-fx-background-color: #14b9d6;" text="Save" textFill="WHITE" />
                                 <Button fx:id="newNoteBtn" layoutX="54.0" layoutY="457.0" mnemonicParsing="false" onAction="#createNewNote" prefHeight="27.0" prefWidth="118.0" style="-fx-background-color: #14b9d6;" text="Create New" textFill="WHITE" />
                         <Button fx:id="deleteBtn" layoutX="296.0" layoutY="457.0" mnemonicParsing="false" onAction="#deleteNote" style="-fx-background-color: #14b9d6;" text="Delete" textFill="WHITE" />
