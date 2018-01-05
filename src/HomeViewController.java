@@ -395,14 +395,13 @@ public class HomeViewController implements Initializable {
         String categoryStr = category.getValue();
         String todoStr = todo.getText();
 
-        if (!(subjectStr == "" && categoryStr == "" && todoStr == "")){
+        if (subjectStr != null && categoryStr != null && todoStr != null && !subjectStr.trim().isEmpty() && !categoryStr.trim().isEmpty() && !todoStr.trim().isEmpty()){
             try {
                 Connection myConn = DriverManager.getConnection(msUrl, user, password);
                 Statement myStmt = myConn.createStatement();
                 String sql = "insert into todo_table (subject, category, todo)"
                         + " values ('" + subjectStr + "', '" + categoryStr + "', '" + todoStr + "')";
                 myStmt.executeUpdate(sql);
-                //URL viewUrl = getClass().getResource("HomeView.fxml");
                 setTableView();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -590,7 +589,6 @@ public class HomeViewController implements Initializable {
         if(recordBtn.getText().equals("●")) {
             recordBtn.setText("■");
             // let QuickTime start recording
-
             try {
                 File file = new File("src/resources/ScreenRecord.scpt");
                 String filePath = file.getAbsolutePath();
