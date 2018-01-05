@@ -156,8 +156,6 @@ public class HomeViewController implements Initializable {
         setDefaultDate();
 
         showDailyStudyTime();
-        setInitialTime(dailyStudyTime / 1000);
-        setDailyTimer(dailyStudyTime / 1000);
 
         setTimeBarChartBySubject();
         setSubjectOption(subjectSelector);
@@ -263,6 +261,7 @@ public class HomeViewController implements Initializable {
     // daily time watch  ------------------------------------------------------
 
     void showDailyStudyTime() {
+        dailyStudyTime = 0;
         try {
             Connection myConn = DriverManager.getConnection(msUrl, user, password);
             Statement myStmt = myConn.createStatement();
@@ -274,8 +273,9 @@ public class HomeViewController implements Initializable {
         }catch (Exception e) {
             e.printStackTrace();
         }
-        
         setDailyTimePieChart(dailyStudyTime);
+        setInitialTime(dailyStudyTime / 1000);
+        setDailyTimer(dailyStudyTime / 1000);
     }
 
     void setInitialTime(long actualStudySec) {
