@@ -206,11 +206,12 @@
                         </Pane>
                         <Pane prefHeight="540.0" prefWidth="920.0">
                             <children>
-                                <JFXListView fx:id="noteList" layoutX="54.0" layoutY="54.0" prefHeight="350.0" prefWidth="300.0" />
-                                <JFXTextArea fx:id="noteEditArea" layoutX="388.0" layoutY="75.0" prefHeight="322.0" prefWidth="393.0" promptText="Enter note" />
-                                <Button fx:id="noteSaveBtn" layoutX="733.0" layoutY="414.0" mnemonicParsing="false" onAction="#saveNote" style="-fx-background-color: #14b9d6;" text="Save" textFill="WHITE" />
-                                <Button fx:id="newNoteBtn" layoutX="294.0" layoutY="414.0" mnemonicParsing="false" onAction="#createNewNote" prefHeight="27.0" prefWidth="54.0" style="-fx-background-color: #14b9d6;" text="New" textFill="WHITE" />
-                        <Button fx:id="deleteBtn" layoutX="221.0" layoutY="414.0" mnemonicParsing="false" onAction="#createNewNote" style="-fx-background-color: #14b9d6;" text="Delete" textFill="WHITE" />
+                                <JFXListView fx:id="noteList" layoutX="54.0" layoutY="97.0" onEditCommit="#updateTitle" onMouseClicked="#showNoteContent" prefHeight="350.0" prefWidth="300.0" />
+                                <JFXTextArea fx:id="noteEditArea" layoutX="388.0" layoutY="97.0" prefHeight="343.0" prefWidth="532.0" promptText="Enter Note" style="-fx-background-color: WHITE;" />
+                                <Button fx:id="noteSaveBtn" layoutX="872.0" layoutY="457.0" mnemonicParsing="false" onAction="#saveNote" style="-fx-background-color: #14b9d6;" text="Save" textFill="WHITE" />
+                                <Button fx:id="newNoteBtn" layoutX="54.0" layoutY="457.0" mnemonicParsing="false" onAction="#createNewNote" prefHeight="27.0" prefWidth="118.0" style="-fx-background-color: #14b9d6;" text="Create New" textFill="WHITE" />
+                        <Button fx:id="deleteBtn" layoutX="296.0" layoutY="457.0" mnemonicParsing="false" onAction="#deleteNote" style="-fx-background-color: #14b9d6;" text="Delete" textFill="WHITE" />
+                        <Button fx:id="editTitleBtn" layoutX="180.0" layoutY="457.0" mnemonicParsing="false" onAction="#editTitle" prefHeight="27.0" prefWidth="108.0" style="-fx-background-color: #14b9d6;" text="Edit Title" textFill="WHITE" />
                             </children>
                         </Pane>
                     </children>

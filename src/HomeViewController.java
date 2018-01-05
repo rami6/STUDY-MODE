@@ -25,6 +25,7 @@
         import javafx.fxml.FXML;
         import javafx.fxml.Initializable;
         import javafx.scene.control.*;
+        import javafx.scene.input.MouseEvent;
         import javafx.stage.Stage;
         import javafx.util.Callback;
         import jdk.jfr.Category;
@@ -114,9 +115,9 @@ public class HomeViewController implements Initializable {
     @FXML
     private JFXTextField selectedDate;
 
-    // note ------------------------------------------------------------
+    // Note ------------------------------------------------------------
     @FXML
-    private JFXListView noteList;
+    private JFXListView<String> noteList;
 
     @FXML
     private JFXTextArea noteEditArea;
@@ -129,6 +130,9 @@ public class HomeViewController implements Initializable {
 
     @FXML
     private Button deleteBtn;
+
+    @FXML
+    private Button editTitleBtn;
 
     // record screen video ----------------------------------------------
     @FXML
@@ -159,7 +163,9 @@ public class HomeViewController implements Initializable {
 
         setTimeBarChartBySubject();
         setSubjectOption(subjectSelector);
-        test();
+        setInitialBarchart2();
+
+        setNoteListView();
 
     }
 
@@ -345,9 +351,6 @@ public class HomeViewController implements Initializable {
     }
 
 
-
-
-
     // daily time pie chart-----------------------------------------------------
 
     void setDailyTimePieChart(long actualStudyTime) {
@@ -421,7 +424,7 @@ public class HomeViewController implements Initializable {
         timeBarChart2.getData().addAll(set);
     }
 
-    void test() {
+    void setInitialBarchart2() {
         timeBarChart2.getData().clear();
 
         XYChart.Series set = new XYChart.Series<>();
@@ -685,13 +688,162 @@ public class HomeViewController implements Initializable {
     // note -------------------------------------------------------------
     @FXML
     void createNewNote(ActionEvent event) {
+        TextInputDialog dialog = new TextInputDialog("");
+        dialog.setContentText("Enter note title:");
+        dialog.setTitle("Create new note");
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
 
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(newTitle -> addNewNote(newTitle));
+
+        try {
+            String updatedNote = noteEditArea.getText();
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            String sql = "update note_table set note = '" + updatedNote + "' where title = '" + noteList.getSelectionModel().getSelectedItem() + "'";
+            myStmt.executeUpdate(sql);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    void addNewNote(String newTitle) {
+        try {
+            String title = newTitle;
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            String sql = "insert into note_table (title, note)"
+                    + " values ('" + title + "', " + "\"\")";
+            myStmt.executeUpdate(sql);
+            setNoteListView();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void saveNote(ActionEvent event) {
+        try {
+            String updatedNote = noteEditArea.getText();
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            String sql = "update note_table set note = '" + updatedNote + "' where title = '" + noteList.getSelectionModel().getSelectedItem() + "'";
+            myStmt.executeUpdate(sql);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    int editingNoteId;
+    @FXML
+    void showNoteContent(MouseEvent event) {
+        String title = noteList.getSelectionModel().getSelectedItem();
+        try {
+        Connection myConn = DriverManager.getConnection(msUrl, user, password);
+        Statement myStmt = myConn.createStatement();
+        ResultSet myRs = myStmt.executeQuery("select * from note_table where title = '" + title + "'");
+        while (myRs.next()) {
+            String noteContent = myRs.getString("note");
+            editingNoteId = myRs.getInt("note_id");
+            noteEditArea.setText(noteContent);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    }
+
+    @FXML
+    void editTitle(ActionEvent event) {
+        String selectedTitle = noteList.getSelectionModel().getSelectedItem();
+        int temp = -1;
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select * from note_table where title = '" + selectedTitle + "'");
+            while (myRs.next()) {
+                temp = myRs.getInt("note_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        final int selectedId = temp;
+
+        TextInputDialog dialog = new TextInputDialog(selectedTitle);
+        dialog.setContentText("Edit note title:");
+        dialog.setTitle("Edit note title");
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(updatedTitle -> updateNoteTitle(updatedTitle, selectedId));
 
     }
+
+    void updateNoteTitle(String updatedTitle, int selectedId) {
+        try {
+            String updatedNote = noteEditArea.getText();
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            String sql = "update note_table set title = '" + updatedTitle + "' where note_id = '" + selectedId + "'";
+            myStmt.executeUpdate(sql);
+            setNoteListView();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void setNoteListView() {
+        noteList.getItems().clear();
+        try {
+            Connection myConn = DriverManager.getConnection(msUrl, user, password);
+            Statement myStmt = myConn.createStatement();
+            ResultSet myRs = myStmt.executeQuery("select * from note_table");
+            while (myRs.next()) {
+                String title = myRs.getString("title");
+                int isVisible = myRs.getInt("isVisible");
+                if (isVisible == 1) {
+                    noteList.getItems().add(title);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void deleteNote() {
+
+        String selectedTitle = noteList.getSelectionModel().getSelectedItem();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you OK to delete \"" + selectedTitle + "\"?");
+        alert.setGraphic(null);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            try {
+                Connection myConn = DriverManager.getConnection(msUrl, user, password);
+                Statement myStmt = myConn.createStatement();
+                String sql = "update note_table set isVisible = '0' where title = '" + noteList.getSelectionModel().getSelectedItem() + "'";
+                myStmt.executeUpdate(sql);
+                setNoteListView();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    void updateTitle() {
+        System.out.println("updateTitle");
+    }
+
+
 
     // record screen video ----------------------------------------------
 
