@@ -103,7 +103,7 @@ public class TodoEditViewController implements Initializable {
         });
 
         JFXTreeTableColumn<TodoInfo, JFXCheckBox> doneCl1 = new JFXTreeTableColumn<>("Done");
-        doneCl1.setPrefWidth(100);
+        doneCl1.setPrefWidth(81);
         doneCl1.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, JFXCheckBox>, ObservableValue<JFXCheckBox>>() {
             @Override
             public ObservableValue<JFXCheckBox> call(TreeTableColumn.CellDataFeatures<TodoInfo, JFXCheckBox> param) {
@@ -112,7 +112,7 @@ public class TodoEditViewController implements Initializable {
         });
 
         JFXTreeTableColumn<TodoInfo, JFXButton> deleteCl1 = new JFXTreeTableColumn<>("Delete");
-        deleteCl1.setPrefWidth(100);
+        deleteCl1.setPrefWidth(81);
         deleteCl1.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton>, ObservableValue<JFXButton>>() {
             @Override
             public ObservableValue<JFXButton> call(TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton> param) {
@@ -152,7 +152,7 @@ public class TodoEditViewController implements Initializable {
         });
 
         JFXTreeTableColumn<TodoInfo, JFXCheckBox> doneCl2 = new JFXTreeTableColumn<>("Done");
-        doneCl2.setPrefWidth(80);
+        doneCl2.setPrefWidth(81);
         doneCl2.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, JFXCheckBox>, ObservableValue<JFXCheckBox>>() {
             @Override
             public ObservableValue<JFXCheckBox> call(TreeTableColumn.CellDataFeatures<TodoInfo, JFXCheckBox> param) {
@@ -161,7 +161,7 @@ public class TodoEditViewController implements Initializable {
         });
 
         JFXTreeTableColumn<TodoInfo, JFXButton> deleteCl2 = new JFXTreeTableColumn<>("Delete");
-        deleteCl2.setPrefWidth(80);
+        deleteCl2.setPrefWidth(81);
         deleteCl2.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton>, ObservableValue<JFXButton>>() {
             @Override
             public ObservableValue<JFXButton> call(TreeTableColumn.CellDataFeatures<TodoInfo, JFXButton> param) {
