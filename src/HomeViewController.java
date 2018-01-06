@@ -208,6 +208,7 @@ public class HomeViewController implements Initializable {
             String sql = "update user_profile_table SET target_hour ='" + targetHpurStr + "' WHERE user_id = 1";
             myStmt.executeUpdate(sql);
             showTargetHour();
+            showDailyStudyTime();
         }catch (Exception e) {
             e.printStackTrace();
         }
