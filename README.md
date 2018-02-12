@@ -4,6 +4,7 @@ STUDY MODE desktop program will help learners to study efficiently. They can man
 Overview
 ---
 ### Top area
+<img width="1312" alt="overview_1" src="https://user-images.githubusercontent.com/30137645/36080883-24e147d6-0f4c-11e8-9453-aeee96f884ed.png">
 ##### Left side
 - user name
 - object hours to study
@@ -13,8 +14,6 @@ Overview
 - view for daily study hours
 - todo list with timer
 
-<img width="1312" alt="overview_1" src="https://user-images.githubusercontent.com/30137645/36080883-24e147d6-0f4c-11e8-9453-aeee96f884ed.png">
-
 ### Middle area
 
-<now editing>
+now editing...
