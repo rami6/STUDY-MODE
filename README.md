@@ -5,6 +5,7 @@ Overview
 ---
 ### Top area
 <img width="1312" alt="overview_1" src="https://user-images.githubusercontent.com/30137645/36080883-24e147d6-0f4c-11e8-9453-aeee96f884ed.png">
+
 ##### Left side
 - user name
 - object hours to study
